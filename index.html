@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RobotStop — the voice stop for robots you already own</title>
+<meta name="description" content="RobotStop is a voice-activated stop-request module that bolts onto a robot you already own. On-device detection, no cloud, no network. Free developer samples.">
+<meta name="theme-color" content="#0a0c0d">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="RobotStop — say stop, it stops">
+<meta property="og:description" content="A voice-activated stop-request module for the robot you already own. Two independent channels, on-device, no cloud.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="shell nav-inner">
+    <a class="brand" href="#top" aria-label="RobotStop home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M11 3h10l8 8v10l-8 8H11l-8-8V11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+        <rect x="13" y="13" width="6" height="6" rx="1" fill="currentColor"/>
+      </svg>
+      <span class="brand-word">Robot<span class="brand-word-accent">Stop</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#why">Why</a>
+      <a href="#how">How it works</a>
+      <a href="#languages">Languages</a>
+      <a href="#diy">Vs. building it</a>
+      <a href="#offerings">Pricing</a>
+      <a href="#standards">Standards</a>
+      <a class="nav-link-alt" href="developers.html">Developers</a>
+    </nav>
+    <a class="btn btn-sm btn-primary" href="#contact">Request a unit</a>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero" id="top">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="shell hero-inner">
+    <p class="eyebrow">Voice stop-request module &middot; VSR-1</p>
+    <h1 class="hero-title">Say &ldquo;stop.&rdquo;<br><span class="hero-title-accent">It stops.</span></h1>
+    <p class="hero-sub">
+      RobotStop is safety hardware for physical AI. It bolts onto a robot you already own
+      and listens for one word in eighteen languages.
+      Two independent channels, all detection on the device, no wake word, no cloud,
+      no network. When anyone in the room says stop, power drops.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#contact">Request a free sample</a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
+    </div>
+    <p class="hero-notice">
+      An extra layer, not a replacement. RobotStop does not stand in for your
+      emergency stops, guarding, procedures or risk assessment &mdash;
+      <a href="legal.html">what that means</a>.
+    </p>
+    <dl class="ticker">
+      <div class="ticker-item"><dt>Stop latency</dt><dd>&le;&thinsp;300 ms<span class="unit">99th percentile</span></dd></div>
+      <div class="ticker-item"><dt>Detection channels</dt><dd>2<span class="unit">independent, cross-monitored</span></dd></div>
+      <div class="ticker-item"><dt>Languages</dt><dd>18<span class="unit">10 qualified, 8 in beta</span></dd></div>
+      <div class="ticker-item"><dt>Cloud services</dt><dd>0<span class="unit">all detection on-device</span></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="section section-problem" id="why">
+  <div class="shell">
+    <p class="eyebrow eyebrow-num"><span>01</span> Why it exists</p>
+    <h2 class="h2">In the second that matters, nobody finds the button.</h2>
+    <p class="lede">
+      An emergency stop only works if a hand reaches one. The person who sees the pinch point
+      first is usually the person who can&rsquo;t get there &mdash; hands full, wrong side of the cell,
+      already on the floor. What everyone does instead is shout.
+      RobotStop makes shouting work.
+    </p>
+    <div class="cards cards-3">
+      <article class="card card-plain">
+        <span class="card-index">A</span>
+        <h3>Hands are already busy</h3>
+        <p>Holding the part, holding the fixture, holding someone else back. A voice is the one input that is always free.</p>
+      </article>
+      <article class="card card-plain">
+        <span class="card-index">B</span>
+        <h3>The button is somewhere else</h3>
+        <p>Mushroom heads live on the cabinet and the pendant. Trouble happens at arm&rsquo;s length, facing the other way.</p>
+      </article>
+      <article class="card card-plain">
+        <span class="card-index">C</span>
+        <h3>Shouting is the reflex</h3>
+        <p>People yell before they reach. Give that reflex a wire into the safety chain and you buy back the time it costs.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-demo">
+  <div class="shell demo-wrap">
+    <div class="demo-copy">
+      <p class="eyebrow eyebrow-num"><span>02</span> On a real arm</p>
+      <h2 class="h2">One word, mid-motion.</h2>
+      <p class="lede">
+        A 7-axis arm running a live task. No pendant, no keyboard, no operator standing at a
+        cabinet. The word is spoken and the motion ends.
+      </p>
+      <ul class="tick-list">
+        <li>Detected on the module &mdash; not on a PC, not in a data center</li>
+        <li>Latched: it stays stopped when the talking stops</li>
+        <li>Wires into the protective-stop input the robot already has</li>
+      </ul>
+    </div>
+    <figure class="demo-media">
+      <video src="media/demo-arm.mp4" poster="media/demo-arm-poster.jpg"
+             controls muted loop playsinline preload="metadata"
+             aria-label="A robot arm stopping mid-motion when a person says stop"></video>
+      <figcaption>Lab footage. Evaluation unit, pre-qualification firmware.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section section-how" id="how">
+  <div class="shell">
+    <p class="eyebrow eyebrow-num"><span>03</span> How it works</p>
+    <h2 class="h2">Two channels that don&rsquo;t trust each other.</h2>
+    <p class="lede">
+      Redundancy only counts when the two halves can fail apart. RobotStop runs two complete
+      detection paths that share no microphone, no power rail and no state &mdash; and either
+      one of them can stop your machine. Both run the same detector, on purpose: one model,
+      qualified once, held to one published bar.
+    </p>
+
+    <div class="diagram-frame">
+      <svg class="diagram" viewBox="0 0 880 330" role="img" aria-label="Block diagram: two microphones on separate power rails feed two processors, one per channel. A single shared model sits between them and is used by both. Either channel's verdict passes through one-out-of-two latching logic to the dual OSSD outputs and the normally closed relay, which de-energize to stop.">
+        <g class="dg-label">
+          <text x="10" y="24">CHANNEL A</text>
+          <text x="10" y="226">CHANNEL B</text>
+        </g>
+        <g class="dg-box">
+          <rect x="10" y="36" width="140" height="56" rx="6"/>
+          <rect x="10" y="238" width="140" height="56" rx="6"/>
+          <rect x="210" y="36" width="170" height="56" rx="6"/>
+          <rect x="210" y="238" width="170" height="56" rx="6"/>
+          <rect x="470" y="117" width="150" height="96" rx="6"/>
+        </g>
+        <g class="dg-box dg-box-shared">
+          <rect x="200" y="136" width="190" height="58" rx="6"/>
+        </g>
+        <g class="dg-box dg-box-accent">
+          <rect x="690" y="117" width="180" height="96" rx="6"/>
+        </g>
+        <g class="dg-text">
+          <text x="80" y="60">Microphone</text>
+          <text x="80" y="76" class="dg-sub">own power rail</text>
+          <text x="80" y="262">Microphone</text>
+          <text x="80" y="278" class="dg-sub">separate rail</text>
+          <text x="295" y="60">MCU + detector</text>
+          <text x="295" y="76" class="dg-sub">channel A</text>
+          <text x="295" y="262">MCU + detector</text>
+          <text x="295" y="278" class="dg-sub">channel B</text>
+          <text x="295" y="160">One model</text>
+          <text x="295" y="178" class="dg-sub">used by both</text>
+          <text x="545" y="159">1-out-of-2</text>
+          <text x="545" y="177" class="dg-sub">latching stop</text>
+          <text x="780" y="151">OSSD1 / OSSD2</text>
+          <text x="780" y="171">NC dry relay</text>
+          <text x="780" y="191" class="dg-sub">de-energize to stop</text>
+        </g>
+        <g class="dg-line">
+          <path d="M150 64 H204"/>
+          <path d="M150 266 H204"/>
+          <path d="M380 64 H430 V145 H464"/>
+          <path d="M380 266 H430 V185 H464"/>
+          <path d="M620 165 H684"/>
+        </g>
+        <g class="dg-line dg-line-dash">
+          <path d="M295 96 V132"/>
+          <path d="M295 198 V234"/>
+        </g>
+        <g class="dg-arrow">
+          <path d="M204 64 l-8 -4 v8 z"/>
+          <path d="M204 266 l-8 -4 v8 z"/>
+          <path d="M464 145 l-8 -4 v8 z"/>
+          <path d="M464 185 l-8 -4 v8 z"/>
+          <path d="M684 165 l-8 -4 v8 z"/>
+        </g>
+      </svg>
+    </div>
+
+    <ol class="steps">
+      <li>
+        <span class="step-n">01</span>
+        <h3>Listen</h3>
+        <p>Each channel has its own microphones and its own safety-manual microcontroller. No shared parts, and no general-purpose operating system anywhere in the stop path.</p>
+      </li>
+      <li>
+        <span class="step-n">02</span>
+        <h3>Decide</h3>
+        <p>Both channels run the same detector &mdash; the one we qualify, at one operating point, against hundreds of hours of hard negatives. No wake word, no enrollment; calm or shouted, both count.</p>
+      </li>
+      <li>
+        <span class="step-n">03</span>
+        <h3>Stop</h3>
+        <p>Either trigger de-energizes the outputs. The stop latches &mdash; silence does not clear it. Only a monitored rising-then-falling reset edge releases it.</p>
+      </li>
+      <li>
+        <span class="step-n">04</span>
+        <h3>Prove it&rsquo;s alive</h3>
+        <p>An acoustic self-test fires a test signal through the real microphone path on a schedule, and the two channels cross-check each other&rsquo;s liveness. A dead mic becomes a declared fault in seconds, not a surprise on demand.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="section section-globe" id="languages">
+  <div class="shell">
+    <p class="eyebrow eyebrow-num"><span>04</span> Languages</p>
+    <h2 class="h2">It stops in the language the room is shouting in.</h2>
+    <p class="lede">
+      Ten languages are qualified individually &mdash; not one English model with translations
+      bolted on top. Each keyword list is validated with native speakers, then measured from
+      scratch against the same protocol: twenty or more speakers per language, balanced by age
+      and sex, a quarter of them non-native, every one of them recording the word calm, raised
+      and shouted &mdash; a fifth of it through a dust mask. Eight more languages are in beta and
+      labeled as such.
+    </p>
+
+    <div class="globe-wrap" id="globe">
+      <div class="globe-stage">
+        <canvas id="globe-canvas" tabindex="0" role="img"
+                aria-label="A globe of the languages RobotStop is qualified in. Drag to spin it; the word for stop appears for the country under the crosshair. Left and right arrow keys step through the languages."></canvas>
+        <p class="globe-hint"><span>Drag to spin</span></p>
+      </div>
+
+      <div class="globe-panel">
+        <div class="globe-read" aria-live="polite">
+          <p class="globe-tier" id="globe-tier">Tier A &middot; qualified</p>
+          <p class="globe-country" id="globe-country">United States</p>
+          <p class="globe-word" id="globe-word" lang="en">stop</p>
+          <p class="globe-meta"><span id="globe-language">English</span><span class="globe-roman" id="globe-roman"></span></p>
+        </div>
+
+        <div class="globe-controls">
+          <button type="button" class="globe-btn" id="globe-prev" aria-label="Previous language">&#8592;</button>
+          <button type="button" class="globe-btn" id="globe-next" aria-label="Next language">&#8594;</button>
+          <button type="button" class="globe-btn globe-btn-wide" id="globe-tour" aria-pressed="true">Pause tour</button>
+        </div>
+
+        <p class="globe-chips-label">All eighteen, tap to jump</p>
+        <ul class="globe-chips" id="globe-chips">
+          <li><button type="button" class="chip" data-i="0" data-country="Mexico" data-language="Spanish" data-word="alto" data-roman="" data-tier="A" data-tag="es" data-lat="19.4" data-lon="-99.1">Spanish</button></li>
+          <li><button type="button" class="chip" data-i="1" data-country="United States" data-language="English" data-word="stop" data-roman="" data-tier="A" data-tag="en" data-lat="38.9" data-lon="-77.0">English</button></li>
+          <li><button type="button" class="chip" data-i="2" data-country="Brazil" data-language="Portuguese" data-word="pare" data-roman="" data-tier="A" data-tag="pt" data-lat="-15.8" data-lon="-47.9">Portuguese</button></li>
+          <li><button type="button" class="chip" data-i="3" data-country="France" data-language="French" data-word="arrête" data-roman="" data-tier="A" data-tag="fr" data-lat="48.9" data-lon="2.4">French</button></li>
+          <li><button type="button" class="chip" data-i="4" data-country="Netherlands" data-language="Dutch" data-word="stop" data-roman="" data-tier="B" data-tag="nl" data-lat="52.4" data-lon="4.9">Dutch</button></li>
+          <li><button type="button" class="chip" data-i="5" data-country="Italy" data-language="Italian" data-word="fermo" data-roman="" data-tier="A" data-tag="it" data-lat="41.9" data-lon="12.5">Italian</button></li>
+          <li><button type="button" class="chip" data-i="6" data-country="Germany" data-language="German" data-word="Stopp" data-roman="" data-tier="A" data-tag="de" data-lat="52.5" data-lon="13.4">German</button></li>
+          <li><button type="button" class="chip" data-i="7" data-country="Poland" data-language="Polish" data-word="stój" data-roman="" data-tier="B" data-tag="pl" data-lat="52.2" data-lon="21.0">Polish</button></li>
+          <li><button type="button" class="chip" data-i="8" data-country="Türkiye" data-language="Turkish" data-word="dur" data-roman="" data-tier="B" data-tag="tr" data-lat="39.9" data-lon="32.9">Turkish</button></li>
+          <li><button type="button" class="chip" data-i="9" data-country="Russia" data-language="Russian" data-word="стой" data-roman="stoy" data-tier="B" data-tag="ru" data-lat="55.8" data-lon="37.6">Russian</button></li>
+          <li><button type="button" class="chip" data-i="10" data-country="Saudi Arabia" data-language="Arabic" data-word="توقف" data-roman="tawaqqaf" data-tier="B" data-tag="ar" data-lat="24.7" data-lon="46.7">Arabic</button></li>
+          <li><button type="button" class="chip" data-i="11" data-country="India" data-language="Hindi" data-word="रुको" data-roman="ruko" data-tier="A" data-tag="hi" data-lat="28.6" data-lon="77.2">Hindi</button></li>
+          <li><button type="button" class="chip" data-i="12" data-country="Thailand" data-language="Thai" data-word="หยุด" data-roman="yut" data-tier="B" data-tag="th" data-lat="13.8" data-lon="100.5">Thai</button></li>
+          <li><button type="button" class="chip" data-i="13" data-country="Vietnam" data-language="Vietnamese" data-word="dừng lại" data-roman="" data-tier="B" data-tag="vi" data-lat="21.0" data-lon="105.8">Vietnamese</button></li>
+          <li><button type="button" class="chip" data-i="14" data-country="Indonesia" data-language="Indonesian" data-word="berhenti" data-roman="" data-tier="B" data-tag="id" data-lat="-6.2" data-lon="106.8">Indonesian</button></li>
+          <li><button type="button" class="chip" data-i="15" data-country="China" data-language="Mandarin" data-word="停" data-roman="tíng" data-tier="A" data-tag="zh" data-lat="39.9" data-lon="116.4">Mandarin</button></li>
+          <li><button type="button" class="chip" data-i="16" data-country="South Korea" data-language="Korean" data-word="멈추" data-roman="meomchwo" data-tier="A" data-tag="ko" data-lat="37.6" data-lon="127.0">Korean</button></li>
+          <li><button type="button" class="chip" data-i="17" data-country="Japan" data-language="Japanese" data-word="止まれ" data-roman="tomare" data-tier="A" data-tag="ja" data-lat="35.7" data-lon="139.7">Japanese</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <dl class="globe-stats">
+      <div><dt>Tier A languages</dt><dd>10<span class="unit">release-blocking</span></dd></div>
+      <div><dt>Speakers per language</dt><dd>&ge;&thinsp;20<span class="unit">balanced, 25% non-native</span></dd></div>
+      <div><dt>Utterances per condition</dt><dd>&ge;&thinsp;1,000<span class="unit">per language</span></dd></div>
+      <div><dt>Site noise recorded</dt><dd>&ge;&thinsp;50 h<span class="unit">from 5 or more real sites</span></dd></div>
+    </dl>
+
+    <p class="kicker kicker-dark kicker-big">
+      Every language at once &mdash;
+      <span class="kicker-accent">protect everyone equally.</span>
+    </p>
+  </div>
+</section>
+
+<section class="section section-diy" id="diy">
+  <div class="shell">
+    <p class="eyebrow eyebrow-num eyebrow-invert"><span>05</span> Versus building it yourself</p>
+    <h2 class="h2">You wouldn&rsquo;t build your own <span class="nowrap">e-stop.</span> Why would this be different?</h2>
+    <p class="lede lede-invert">
+      Nobody machines their own mushroom button, writes their own safety relay, or signs off on
+      their own light curtain. They buy the part that arrives with a test report behind it. A
+      voice stop is the same category of thing in newer clothes: the keyword spotter is a solved
+      undergraduate project, the stop you are willing to put your name on is not, and the gap
+      between those two is the entire product. The demo takes a weekend. The safety case takes a
+      year.
+    </p>
+
+    <div class="table-wrap">
+      <table class="compare">
+        <caption class="sr-only">Comparison of an in-house build against RobotStop</caption>
+        <thead>
+          <tr>
+            <th scope="col">&nbsp;</th>
+            <th scope="col">In-house build</th>
+            <th scope="col" class="col-us">RobotStop</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Redundancy</th>
+            <td data-label="In-house build">One mic, one board, one model</td>
+            <td class="col-us" data-label="RobotStop">Two independent microphone channels, cross-monitored &mdash; either one alone stops it</td>
+          </tr>
+          <tr>
+            <th scope="row">Failure mode</th>
+            <td data-label="In-house build">Fails silent &mdash; you find out on demand</td>
+            <td class="col-us" data-label="RobotStop">De-energize to stop; any detected fault drives outputs off</td>
+          </tr>
+          <tr>
+            <th scope="row">Reset logic</th>
+            <td data-label="In-house build">A boolean somebody clears in software</td>
+            <td class="col-us" data-label="RobotStop">Latched stop, monitored reset edge, stuck-high rejected</td>
+          </tr>
+          <tr>
+            <th scope="row">Self-test</th>
+            <td data-label="In-house build">None. A muted mic looks identical to a quiet room</td>
+            <td class="col-us" data-label="RobotStop">Periodic end-to-end acoustic test through the real mic path</td>
+          </tr>
+          <tr>
+            <th scope="row">False triggers</th>
+            <td data-label="In-house build">&ldquo;Don&rsquo;t stop,&rdquo; &ldquo;bus stop,&rdquo; and the robot&rsquo;s own voice all fire it</td>
+            <td class="col-us" data-label="RobotStop">Tuned against hundreds of hours of hard negatives, incl. robot speech</td>
+          </tr>
+          <tr>
+            <th scope="row">Evidence</th>
+            <td data-label="In-house build">A video of the time it worked</td>
+            <td class="col-us" data-label="RobotStop">A published test protocol and a witnessed report per release</td>
+          </tr>
+          <tr>
+            <th scope="row">Sign-off</th>
+            <td data-label="In-house build">You, explaining a side project to your safety officer</td>
+            <td class="col-us" data-label="RobotStop">Documentation written for the person who has to sign</td>
+          </tr>
+          <tr>
+            <th scope="row">If it misses</th>
+            <td data-label="In-house build">That is on you</td>
+            <td class="col-us" data-label="RobotStop">That is on us &mdash; it is the only thing we build</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="kicker">Nobody wants to own the safety feature. Own the robot; let us own the stop.</p>
+  </div>
+</section>
+
+<section class="section section-offerings" id="offerings">
+  <div class="shell">
+    <p class="eyebrow eyebrow-num"><span>06</span> What you can buy</p>
+    <h2 class="h2">Three ways to put it on your robot.</h2>
+    <p class="lede">Start with one detector on one machine. Scale to a fleet when it has earned it.</p>
+
+    <div class="cards cards-3 cards-price">
+      <article class="card card-price">
+        <header>
+          <p class="price-tag">Out of the box</p>
+          <h3>RobotStop Detector</h3>
+          <p class="price"><span class="price-num">Free</span><span class="price-unit">developer sample</span></p>
+          <p class="price-note">One per robot, while they last. $49 if you want to buy more without talking to us.</p>
+        </header>
+        <ul class="feat">
+          <li>Plug in, attach to the robot you already own</li>
+          <li>Listening from boot &mdash; no setup, no account, no network, no wake word</li>
+          <li>3.3&thinsp;V logic output, de-energize to stop &mdash; drive an optocoupler or a relay coil. <em>The OSSD pair and NC dry relay ship with the certified module.</em></li>
+          <li>USB-C: status, JSON per detection, and it types results as a USB keyboard with no driver</li>
+          <li>Red / green verdict LED</li>
+          <li><strong>English, uncertified, one detection path.</strong> A developer sample, not a safety device</li>
+        </ul>
+        <a class="btn btn-outline" href="#contact">Request a sample</a>
+      </article>
+
+      <article class="card card-price card-feature">
+        <span class="ribbon">Most integrations</span>
+        <header>
+          <p class="price-tag">Custom services</p>
+          <h3>Integration &amp; Engineering</h3>
+          <p class="price"><span class="price-num">Quoted</span><span class="price-unit">per robot</span></p>
+          <p class="price-note">Scoped from your cell, your controller, your risk assessment.</p>
+        </header>
+        <ul class="feat">
+          <li><strong>Full battery cutoff</strong> &mdash; the stop opens the pack contactor and removes power at the source</li>
+          <li><strong>Soft stop and hard stop</strong> &mdash; selectable outputs for controlled deceleration or immediate power removal</li>
+          <li>Wiring, commissioning and sign-off support against your safety PLC</li>
+          <li>ROS 2 driver integration, custom keywords and languages</li>
+          <li>Microphone placement and acoustic coverage survey for the cell</li>
+          <li>Enclosure and mounting adapted to your machine</li>
+        </ul>
+        <a class="btn btn-primary" href="#contact">Scope an integration</a>
+      </article>
+
+      <article class="card card-price">
+        <header>
+          <p class="price-tag">Fleet</p>
+          <h3>Volume &amp; Support</h3>
+          <p class="price"><span class="price-num">Tiered</span><span class="price-unit">by unit count</span></p>
+          <p class="price-note">For anyone rolling this out past a single machine.</p>
+        </header>
+        <ul class="feat">
+          <li>Large-quantity pricing on detectors, tiered by unit count</li>
+          <li>Staged rollout across a fleet, with spares held for you</li>
+          <li>Qualification and compliance document pack for your files</li>
+          <li>Priority support, response-time commitments, RMA handling</li>
+          <li>Operator and maintenance training on the stop behavior</li>
+        </ul>
+        <a class="btn btn-outline" href="#contact">Talk volume</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-standards" id="standards">
+  <div class="shell">
+    <p class="eyebrow eyebrow-num"><span>07</span> Straight about standards</p>
+    <h2 class="h2">What it is, and what it is not.</h2>
+    <p class="lede">
+      Safety products earn trust by being precise about their own limits. Here are ours,
+      in the same words we put in the manual.
+    </p>
+
+    <div class="split">
+      <div class="split-col">
+        <h3 class="split-h split-h-yes">What it is</h3>
+        <ul class="tick-list">
+          <li>A supplementary protective measure: one more stop-request input to the safety-related control system your machine already has.</li>
+          <li>Designed to an ISO 13849-1 Category 3 architecture, targeting PL d, so certification is possible without a redesign.</li>
+          <li>Frozen at release. No field learning, no drifting thresholds. Signed firmware and secure boot ship with the certified module.</li>
+          <li>Entirely local. No network connection, nothing outbound, no continuous audio stored. The radio on today&rsquo;s module is unused and disabled in firmware; the certified part will not have one.</li>
+        </ul>
+      </div>
+      <div class="split-col">
+        <h3 class="split-h split-h-no">What it is not</h3>
+        <ul class="tick-list tick-list-no">
+          <li>Not an emergency stop device in the sense of ISO 13850, and never labeled or sold as one.</li>
+          <li>Not a substitute for guarding, e-stops, interlocks, procedures, training or your risk assessment. It is added to them, never instead of them.</li>
+          <li>Not yet certified as a safety component. Units shipping today are evaluation kits, and they go out in writing as such.</li>
+          <li>Not a reason to stand anywhere you would not have stood before.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="protocol">
+      <div class="protocol-head">
+        <h3>Qualification protocol v1</h3>
+        <p>Our release-blocking thresholds and the method behind them are published, so you can hold us to them &mdash; or measure any other voice stop against the same bar.</p>
+      </div>
+      <dl class="protocol-grid">
+        <div><dt>Detection, person near the robot</dt><dd>&ge;&thinsp;99.5%<span class="unit">&le;3 m, &ge;+10 dB SNR</span></dd></div>
+        <div><dt>Detection, busy floor</dt><dd>&ge;&thinsp;97%<span class="unit">&le;5 m, 0 dB SNR</span></dd></div>
+        <div><dt>Detection, shout across the cell</dt><dd>&ge;&thinsp;90%<span class="unit">at 10 m</span></dd></div>
+        <div><dt>Nuisance triggers</dt><dd>&le;&thinsp;1<span class="unit">per 500 h of floor noise</span></dd></div>
+        <div><dt>Stop latency</dt><dd>&le;&thinsp;300 ms<span class="unit">99th percentile</span></dd></div>
+        <div><dt>Each channel alone</dt><dd>Meets<span class="unit">the same detection bar</span></dd></div>
+      </dl>
+      <p class="protocol-foot">Thresholds are met on the 95% lower confidence bound, not the point estimate. Every threshold is verified per firmware release and the report is witnessed by an independent party.</p>
+    </div>
+  </div>
+</section>
+
+<section class="notice-band" aria-labelledby="notice-head">
+  <div class="shell notice-inner">
+    <p class="notice-flag">Safety notice</p>
+    <h2 class="notice-h" id="notice-head">
+      Keep every stop you already have.
+    </h2>
+    <p class="notice-body">
+      RobotStop is a supplementary protective measure and is not an emergency
+      stop device under ISO 13850. It is not certified as a safety component.
+      Nothing about installing it justifies removing, bypassing or deferring an
+      emergency stop, a guard, an interlock, a procedure or a training
+      requirement &mdash; it is worth having only while all of those stay in
+      place. Voice detection can miss a word; a cable, a host or a power supply
+      can fail outright.
+    </p>
+    <p class="notice-more">
+      <a href="legal.html">Terms, limits of use and the full safety notice</a>
+    </p>
+  </div>
+</section>
+
+<section class="section section-cta" id="contact">
+  <div class="shell cta-inner">
+    <p class="eyebrow">Get started</p>
+    <h2 class="h2 cta-h">Put a stop on it this month.</h2>
+    <p class="lede lede-invert cta-lede">
+      Tell us the robot, the cell, and who signs off on safety. We will tell you exactly what it
+      takes &mdash; including when the answer is that you don&rsquo;t need us yet.
+    </p>
+    <div class="hero-actions cta-actions">
+      <a class="btn btn-primary btn-lg" href="mailto:robotstop.contact@gmail.com?subject=RobotStop%20enquiry">robotstop.contact@gmail.com</a>
+      <a class="btn btn-ghost btn-lg" href="mailto:robotstop.contact@gmail.com?subject=RobotStop%20developer%20sample">Request a developer sample</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="shell footer-inner">
+    <div class="footer-brand">
+      <span class="brand-word">Robot<span class="brand-word-accent">Stop</span></span>
+      <p>Voice stop-request modules for physical AI.</p>
+      <p class="footer-links">
+        <a href="developers.html">Developers</a> &middot;
+        <a href="legal.html">Legal &amp; safety notice</a>
+      </p>
+    </div>
+    <p class="footer-legal">
+      Designed to ISO 13849-1 Category 3 architecture. Not certified as a safety component.
+      RobotStop is a supplementary protective measure, is not an emergency stop device, and
+      does not replace guarding, emergency stops, procedures or a risk assessment.
+    </p>
+  </div>
+</footer>
+
+<script src="globe-land.js" defer></script>
+<script src="globe.js" defer></script>
+<script src="main.js" defer></script>
+</body>
+</html>

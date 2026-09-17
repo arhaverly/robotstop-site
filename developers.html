@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RobotStop for developers — read the JSON</title>
+<meta name="description" content="A RobotStop detector sends one line of JSON per utterance over USB-C. Read it, look at match, act. Full field reference on one page.">
+<meta name="theme-color" content="#0a0c0d">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="docs">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="shell nav-inner">
+    <a class="brand" href="index.html" aria-label="RobotStop home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M11 3h10l8 8v10l-8 8H11l-8-8V11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+        <rect x="13" y="13" width="6" height="6" rx="1" fill="currentColor"/>
+      </svg>
+      <span class="brand-word">Robot<span class="brand-word-accent">Stop</span></span>
+      <span class="brand-tag">Developers</span>
+    </a>
+    <a class="btn btn-sm btn-primary" href="index.html#contact">Get a detector</a>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="docs-hero">
+  <div class="shell docs-single">
+    <p class="eyebrow">Developer guide</p>
+    <h1 class="docs-title">It types its answer. Act on <span class="hero-title-accent">match</span>.</h1>
+    <p class="docs-lede">
+      Plug a detector in and it behaves like a USB keyboard: every time somebody
+      says something, it types one flat JSON object wherever your cursor is. No
+      port to open, no driver, no code. When you want software to act on it
+      instead, the same line is on the serial port &mdash; and when you want no
+      computer at all, there is a pin.
+    </p>
+  </div>
+</section>
+
+<div class="shell docs-single docs-body docs-plain">
+
+  <section class="docs-section">
+    <p class="lede-first">
+      Open a text editor, put the cursor in it, and say something. This is what
+      lands:
+    </p>
+    <pre class="code code-wrap" data-lang="typed"><code>{"n":4,"match":false,"keyword":"stop","score":0.2731,"length_ms":170,"latched":true,"uptime_ms":640527}</code></pre>
+
+    <div class="table-scroll">
+      <table class="docs-table">
+        <thead><tr><th>Field</th><th>Type</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>match</code></td>
+            <td>bool</td>
+            <td><strong>The answer.</strong> <code>true</code> means the keyword was heard and the detector has asserted its stop. Both microphones feed this: either one hearing it makes it <code>true</code>.</td>
+          </tr>
+          <tr><td><code>score</code></td><td>float 0&ndash;1</td><td>How confident it was. Useful for logs and graphs &mdash; the operating point is already applied, so do not threshold it yourself.</td></tr>
+          <tr><td><code>keyword</code></td><td>string</td><td>The word this unit listens for.</td></tr>
+          <tr><td><code>length_ms</code></td><td>int</td><td>How long the utterance was.</td></tr>
+          <tr><td><code>latched</code></td><td>bool</td><td><code>true</code> while a stop is being held. Send <code>Z\n</code> to clear it.</td></tr>
+          <tr><td><code>n</code></td><td>int</td><td>Utterance counter since power-on. A gap means you missed a line.</td></tr>
+          <tr><td><code>uptime_ms</code></td><td>int</td><td>Milliseconds since the detector booted. Device clock, not wall clock.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="docs-section">
+    <h2>Three ways out</h2>
+    <p>
+      All three are live at once. Pick whichever suits what you are building
+      &mdash; you do not configure anything to choose.
+    </p>
+
+    <div class="table-scroll">
+      <table class="docs-table">
+        <thead><tr><th>Way out</th><th>Needs</th><th>Use it when</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>USB keyboard</strong><br><span class="muted">the default</span></td>
+            <td>Nothing. It types.</td>
+            <td>You want the data now &mdash; into a spreadsheet, a text file, a
+              log window, a form. Send <code>H0\n</code> to stop it typing,
+              <code>H1\n</code> to resume.</td>
+          </tr>
+          <tr>
+            <td><strong>USB-C serial</strong></td>
+            <td>A serial port at 921600</td>
+            <td>Software has to react to it. Same JSON, same moment.</td>
+          </tr>
+          <tr>
+            <td><strong>Stop pin</strong></td>
+            <td>Two wires</td>
+            <td>No computer in the loop. <strong>HIGH while ready, LOW while
+              stopped</strong>, so a cut wire or a dead board reads as stopped.
+              Drive an optocoupler or a relay coil from it &mdash; not a machine
+              directly.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="docs-section">
+    <h2>Read it from code</h2>
+
+    <pre class="code" data-lang="python"><code>import json, serial   # pip install pyserial
+
+with serial.Serial("/dev/cu.usbmodem101", 921600) as detector:
+    for line in detector:
+        event = json.loads(line)
+        if event["match"]:
+            stop_the_robot()</code></pre>
+
+    <pre class="code" data-lang="javascript"><code>// npm install serialport
+import { SerialPort } from "serialport";
+import { ReadlineParser } from "@serialport/parser-readline";
+
+new SerialPort({ path: "COM4", baudRate: 921600 })
+  .pipe(new ReadlineParser())
+  .on("data", (line) => {
+    const event = JSON.parse(line);
+    if (event.match) stopTheRobot();
+  });</code></pre>
+
+    <p>
+      Port names: <code>/dev/cu.usbmodem*</code> on macOS,
+      <code>COM*</code> on Windows, <code>/dev/ttyACM*</code> on Linux. No driver,
+      no SDK. Lines that do not start with <code>{</code> are human-readable notes
+      &mdash; skip them.
+    </p>
+  </section>
+
+  <section class="docs-section">
+    <div class="callout callout-warn">
+      <p class="callout-head">USB is telemetry, not the safety path</p>
+      <p>
+        A host can be busy, an operating system can buffer, a cable can be
+        unplugged, and a window can lose focus. Neither the keyboard output nor
+        the serial line belongs in a safety path. That is what the stop pin is
+        for: wire it into the machine&rsquo;s protective-stop circuit and use the
+        JSON to log, display and react. RobotStop is a supplementary protective
+        measure and is not an emergency stop device.
+      </p>
+    </div>
+  </section>
+
+  <section class="docs-section">
+    <h2>If something looks wrong</h2>
+    <div class="table-scroll">
+      <table class="docs-table">
+        <tbody>
+          <tr><td><strong>It is typing into the wrong window</strong></td><td>That is what a keyboard does. Send <code>H0\n</code> to stop it typing and read the serial port instead.</td></tr>
+          <tr><td><strong>Nothing gets typed</strong></td><td>Some hosts ignore a new keyboard until you click into a text field. Check the serial port is still showing lines &mdash; if it is, the detector is fine.</td></tr>
+          <tr><td><strong>No port appears</strong></td><td>Charge-only USB-C cable. Swap it.</td></tr>
+          <tr><td><strong>Gibberish</strong></td><td>Wrong baud. It is 921600.</td></tr>
+          <tr><td><strong>Nothing arrives</strong></td><td>Normal when the room is quiet &mdash; lines come when somebody speaks. Also check nothing else has the port open.</td></tr>
+          <tr><td><strong>One stop, then never again</strong></td><td><code>latched</code> is <code>true</code>. Send <code>Z\n</code>.</td></tr>
+          <tr><td><strong>Always <code>match:false</code></strong></td><td>Send <code>?\n</code> and mail us what it prints, with a few of these lines.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="docs-cta">
+      <h3>Anything else</h3>
+      <p>Paste us the lines and tell us what you are building.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="mailto:robotstop.contact@gmail.com?subject=RobotStop%20developer%20question">robotstop.contact@gmail.com</a>
+        <a class="btn btn-outline" href="index.html#offerings">See what&rsquo;s on offer</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</main>
+
+<footer class="footer">
+  <div class="shell footer-inner">
+    <div class="footer-brand">
+      <span class="brand-word">Robot<span class="brand-word-accent">Stop</span></span>
+      <p>Voice stop-request modules for physical AI.</p>
+      <p class="footer-links">
+        <a href="index.html">Home</a> &middot;
+        <a href="legal.html">Legal &amp; safety notice</a>
+      </p>
+    </div>
+    <p class="footer-legal">
+      Designed to ISO 13849-1 Category 3 architecture. Not certified as a safety component.
+      RobotStop is a supplementary protective measure, is not an emergency stop device, and
+      does not replace guarding, emergency stops, procedures or a risk assessment.
+    </p>
+  </div>
+</footer>
+
+<script src="docs.js" defer></script>
+</body>
+</html>

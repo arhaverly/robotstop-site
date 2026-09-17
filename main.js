@@ -1,0 +1,39 @@
+/* Two small enhancements, both optional: a nav that gains a border once you
+   leave the hero, and a one-shot fade for sections as they arrive. */
+(function () {
+  'use strict';
+
+  var nav = document.getElementById('nav');
+  if (nav) {
+    var onScroll = function () {
+      nav.classList.toggle('is-stuck', window.scrollY > 24);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) return;
+
+  var seen = [];
+  Array.prototype.forEach.call(
+    document.querySelectorAll('.section > .shell > *'),
+    function (el) {
+      seen.push(el);
+      el.classList.add('reveal');
+    }
+  );
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-in');
+      io.unobserve(entry.target);
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+  seen.forEach(function (el, i) {
+    el.style.transitionDelay = Math.min(i % 4, 3) * 60 + 'ms';
+    io.observe(el);
+  });
+})();
