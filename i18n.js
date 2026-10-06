@@ -244,6 +244,7 @@
     for (var i = 0; i < LANGS.length; i++) {
       var on = LANGS[i].code === code;
       pick.items[i].setAttribute('aria-checked', on ? 'true' : 'false');
+      pick.seg[i].setAttribute('aria-current', on ? 'true' : 'false');
       if (on) pick.code.textContent = LANGS[i].short;
     }
   }
@@ -324,10 +325,30 @@
     });
     document.addEventListener('click', function (e) { if (!wrap.contains(e.target)) close(false); });
 
+    // The usual form: all four short labels in a row, no menu at all. The
+    // trigger and menu above take over only when the nav is short of room.
+    var seg = document.createElement('div');
+    seg.className = 'lang-seg';
+    seg.setAttribute('role', 'group');
+    seg.setAttribute('aria-label', 'Language · Idioma · 语言 · 語言');
+    var segs = LANGS.map(function (L) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'lang-opt';
+      b.setAttribute('lang', L.code);
+      b.setAttribute('data-code', L.code);
+      b.setAttribute('aria-label', L.label);
+      b.textContent = L.short;
+      b.addEventListener('click', function () { setLanguage(L.code, true); });
+      seg.appendChild(b);
+      return b;
+    });
+
+    wrap.appendChild(seg);
     wrap.appendChild(btn);
     wrap.appendChild(menu);
     slot.appendChild(wrap);
-    pick = { btn: btn, code: btn.firstChild, menu: menu, items: items };
+    pick = { btn: btn, code: btn.firstChild, menu: menu, items: items, seg: segs };
     syncPicker(current);
   }
 

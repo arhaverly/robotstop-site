@@ -14,12 +14,13 @@
     // Hide the section links when they no longer fit on one row: the width
     // they need depends on the language, so measure instead of a breakpoint.
     var inner = nav.querySelector('.nav-inner');
-    // In steps, until it fits: drop the section links, then the page tag
-    // beside the logo.
+    // In steps, until it fits: set the links a little tighter, fold the
+    // language row into its menu, and only then drop the links (then the tag).
+    // The links are the nav's job, so they go last.
     var fit = function () {
       if (!inner) return;
       var over = function () { return inner.scrollWidth > inner.clientWidth + 1; };
-      var steps = ['nav-tight', 'nav-bare'];
+      var steps = ['nav-snug', 'nav-lang-menu', 'nav-tight', 'nav-bare', 'nav-min'];
       nav.classList.remove.apply(nav.classList, steps);
       for (var i = 0; i < steps.length && over(); i++) nav.classList.add(steps[i]);
     };
