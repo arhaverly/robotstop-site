@@ -451,5 +451,11 @@ RobotStopI18n.add("es", {
   "Spanish is official nationwide; other languages have regional official status.": "El español es oficial en todo el país; otros idiomas tienen carácter oficial regional.",
   "Romansh is official in federal dealings with Romansh speakers.": "El romanche es oficial en las comunicaciones federales con sus hablantes.",
   "English was designated the official language by executive order on March 1, 2025. State and territorial designations can differ.": "El inglés fue designado idioma oficial por orden ejecutiva el 1 de marzo de 2025. Las designaciones estatales y territoriales pueden variar.",
-  "Uruguayan Sign Language is legally recognized.": "La lengua de señas uruguaya tiene reconocimiento legal."
+  "Uruguayan Sign Language is legally recognized.": "La lengua de señas uruguaya tiene reconocimiento legal.",
+  "Drag to spin · search for a country": "Arrastra para girar · busca un país",
+  "Search countries": "Buscar países",
+  "Type a country name or code": "Escribe el nombre o código de un país",
+  "No countries found. Try another name or country code.": "No se encontraron países. Prueba otro nombre o código de país.",
+  "Showing the first 6 matches. Keep typing to narrow your search.": "Se muestran las primeras 6 coincidencias. Sigue escribiendo para acotar la búsqueda.",
+  "{total} matching countries. Select a result or press Enter for the first match.": "{total} países coincidentes. Selecciona un resultado o presiona Intro para elegir el primero."
 });

@@ -451,5 +451,11 @@ RobotStopI18n.add("zh-Hant", {
   "Spanish is official nationwide; other languages have regional official status.": "西班牙語在全國具有官方地位；其他語言在部分地區具有官方地位。",
   "Romansh is official in federal dealings with Romansh speakers.": "羅曼什語在聯邦與羅曼什語使用者的事務往來中具有官方地位。",
   "English was designated the official language by executive order on March 1, 2025. State and territorial designations can differ.": "英語於 2025 年 3 月 1 日透過行政命令被指定為官方語言。各州和屬地的規定可能有所不同。",
-  "Uruguayan Sign Language is legally recognized.": "烏拉圭手語獲得法律承認。"
+  "Uruguayan Sign Language is legally recognized.": "烏拉圭手語獲得法律承認。",
+  "Drag to spin · search for a country": "拖曳旋轉 · 搜尋國家",
+  "Search countries": "搜尋國家",
+  "Type a country name or code": "輸入國家名稱或代碼",
+  "No countries found. Try another name or country code.": "找不到國家。請嘗試其他名稱或國家代碼。",
+  "Showing the first 6 matches. Keep typing to narrow your search.": "顯示前 6 個符合的結果。繼續輸入以縮小搜尋範圍。",
+  "{total} matching countries. Select a result or press Enter for the first match.": "找到 {total} 個符合的國家。選擇一個結果或按 Enter 選擇第一個。"
 });

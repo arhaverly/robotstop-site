@@ -1370,11 +1370,17 @@ a { color: inherit; text-decoration: none; }
 .globe-source a, .globe-search-link { font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
 .globe-search-link { display: inline-block; margin-top: 18px; }
 .globe-panel > .globe-chips-label { margin-top: 0; }
-.globe-hint { white-space: nowrap; }
+.globe-hint { width: 100%; text-align: center; }
 .globe-meta { overflow-wrap: anywhere; }
 .globe-controls .globe-btn-wide { height: auto; min-height: 38px; }
 .country-picker-label { display: block; margin: 20px 0 8px; font-size: 13px; color: var(--muted); }
 .country-picker { width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 7px; background: var(--paper); color: var(--text); font: inherit; }
+.country-search-results { margin-top: 8px; padding: 4px; border: 1px solid var(--line); border-radius: 7px; }
+.country-search-results[hidden] { display: none; }
+.country-search-results button { display: block; width: 100%; padding: 10px; border: 0; border-radius: 4px; background: transparent; color: var(--text); font: inherit; text-align: start; cursor: pointer; overflow-wrap: anywhere; }
+.country-search-results button:hover, .country-search-results button:focus-visible { background: #f2f2ef; outline: 2px solid var(--accent); outline-offset: -2px; }
+.country-search-status { margin-top: 8px; color: var(--muted); font-size: 13px; }
+.country-search-status:empty { display: none; }
 .country-read { margin-top: 24px; }
 .country-name { font-size: clamp(28px, 4vw, 40px); line-height: 1.15; letter-spacing: -.03em; overflow-wrap: anywhere; }
 .country-language-groups > div { margin-top: 20px; }

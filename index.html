@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=461bf8aac3">
+<link rel="stylesheet" href="styles.css?v=5543433bfb">
 <script src="i18n.js?v=c3d230d2d3"></script>
 </head>
 <body>
@@ -261,15 +261,17 @@
       <div class="globe-stage">
         <canvas id="globe-canvas" data-i18n-dynamic tabindex="0" role="img"
                 aria-label="Country globe. United States: English. Enable JavaScript to explore every country."></canvas>
-        <p class="globe-hint"><span>Drag to spin &middot; choose a country</span></p>
+        <p class="globe-hint"><span>Drag to spin &middot; search for a country</span></p>
       </div>
       <div class="globe-panel">
         <p class="globe-chips-label">Official languages around the world</p>
         <p class="globe-coverage" id="globe-coverage" data-i18n-dynamic>197 countries &middot; official languages by country</p>
-        <label class="country-picker-label" for="globe-country-select">Choose a country</label>
-        <select id="globe-country-select" class="country-picker" data-i18n-dynamic disabled>
-          <option value="US">United States</option>
-        </select>
+        <label class="country-picker-label" for="globe-country-search">Search countries</label>
+        <input type="search" id="globe-country-search" class="country-picker"
+               placeholder="Type a country name or code" autocomplete="off" spellcheck="false"
+               aria-controls="globe-country-results" aria-describedby="globe-search-status" disabled>
+        <ul id="globe-country-results" class="country-search-results" data-i18n-dynamic hidden></ul>
+        <p id="globe-search-status" class="country-search-status" role="status" data-i18n-dynamic></p>
         <div class="globe-read country-read" aria-live="polite" aria-atomic="true">
           <h3 class="country-name" id="globe-country" data-i18n-dynamic>United States</h3>
           <div id="globe-language-groups" class="country-language-groups" data-i18n-dynamic>
@@ -284,8 +286,6 @@
         </details>
         <p class="globe-source"><a id="globe-source" data-i18n-dynamic href="country-languages.json">Country language source</a></p>
         <div class="globe-controls">
-          <button type="button" class="globe-btn" id="globe-prev" aria-label="Previous country" disabled>&#8592;</button>
-          <button type="button" class="globe-btn" id="globe-next" aria-label="Next country" disabled>&#8594;</button>
           <button type="button" class="globe-btn globe-btn-wide" id="globe-tour" data-i18n-dynamic aria-pressed="false" disabled>Start country tour</button>
         </div>
         <p class="globe-note">One marker per country. Official, de facto and working languages have
@@ -595,7 +595,7 @@
 
 <script src="globe-land.js?v=3cd4155b97" defer></script>
 <script src="country-languages.js?v=ccd7e256e4" defer></script>
-<script src="globe.js?v=1b08f63696" defer></script>
+<script src="globe.js?v=8a95c431f3" defer></script>
 <script src="language-catalog.js?v=98963e0c17" defer></script>
 <script src="languages.js?v=440882dce4" defer></script>
 <script src="main.js?v=5ee04a7774" defer></script>

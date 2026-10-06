@@ -52,7 +52,10 @@
     position: document.getElementById('globe-position'),
     source: document.getElementById('globe-source')
   };
-  var picker = document.getElementById('globe-country-select');
+  var search = document.getElementById('globe-country-search');
+  var searchResults = document.getElementById('globe-country-results');
+  var searchStatus = document.getElementById('globe-search-status');
+  var matches = [];
   var regionNames, languageNames;
   function readNames() {
     try {
@@ -71,19 +74,55 @@
     }
     return t(name);
   }
-  function populatePicker() {
-    picker.replaceChildren();
-    COUNTRIES.forEach(function (country) {
-      var option = document.createElement('option');
-      option.value = country.id;
-      option.textContent = countryName(country);
-      picker.appendChild(option);
+  function normalize(value) {
+    return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[.]/g, '').trim();
+  }
+  var aliases = { US: 'USA United States of America', GB: 'UK Britain Great Britain',
+    AE: 'UAE', KR: 'South Korea', KP: 'North Korea', CN: 'China',
+    CI: 'Ivory Coast Côte d’Ivoire', TR: 'Turkey Türkiye', VA: 'Vatican Holy See' };
+  function closeSearch() {
+    matches = [];
+    searchResults.replaceChildren();
+    searchResults.hidden = true;
+    searchStatus.textContent = '';
+  }
+  function chooseCountry(index) {
+    search.value = '';
+    closeSearch();
+    stopTour(); dismissHint(); goTo(index, 700);
+    search.focus({ preventScroll: true });
+  }
+  function updateSearch() {
+    closeSearch();
+    var query = normalize(search.value);
+    if (!query) return;
+    matches = COUNTRIES.map(function (country, index) {
+      var names = [country.id, country.name, countryName(country), aliases[country.id] || ''].map(normalize);
+      var score = names.some(function (name) { return name === query; }) ? 0 :
+        names.some(function (name) { return name.startsWith(query); }) ? 1 :
+        names.some(function (name) { return name.includes(query); }) ? 2 : 3;
+      return { index: index, score: score };
+    }).filter(function (match) { return match.score < 3; }).sort(function (a, b) { return a.score - b.score; });
+    if (!matches.length) {
+      searchStatus.textContent = t('No countries found. Try another name or country code.');
+      return;
+    }
+    var total = matches.length;
+    matches = matches.slice(0, 6);
+    searchResults.hidden = false;
+    matches.forEach(function (match) {
+      var item = document.createElement('li');
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = countryName(COUNTRIES[match.index]);
+      button.addEventListener('click', function () { chooseCountry(match.index); });
+      item.appendChild(button);
+      searchResults.appendChild(item);
     });
-    picker.value = COUNTRIES[sel].id;
+    searchStatus.textContent = total > 6 ? t('Showing the first 6 matches. Keep typing to narrow your search.') :
+      format('{total} matching countries. Select a result or press Enter for the first match.', { total: total });
   }
   readNames();
-  var prevBtn = document.getElementById('globe-prev');
-  var nextBtn = document.getElementById('globe-next');
   var tourBtn = document.getElementById('globe-tour');
   var hint = wrap.querySelector('.globe-hint');
 
@@ -328,7 +367,6 @@
     out.position.textContent = format('Country {position} of {total}', { position: count(sel + 1), total: count(COUNTRIES.length) });
     out.source.href = country.sources[0];
     out.source.textContent = t('Country language source');
-    picker.value = country.id;
     canvas.setAttribute('aria-label', format('Country globe. Selected: {name}. Languages: {languages}. Drag to spin, click a marker, or use arrow keys to browse {total} countries.', {
       name: name, languages: ['official', 'deFacto', 'working', 'national'].flatMap(function (key) { return country[key]; }).map(languageName).join(', '),
       total: count(COUNTRIES.length)
@@ -475,29 +513,38 @@
     dismissHint();
   });
 
-  prevBtn.addEventListener('click', function () {
-    stopTour(); dismissHint(); goTo((sel - 1 + COUNTRIES.length) % COUNTRIES.length, 600);
-  });
-  nextBtn.addEventListener('click', function () {
-    stopTour(); dismissHint(); goTo((sel + 1) % COUNTRIES.length, 600);
-  });
   tourBtn.addEventListener('click', function () {
     if (tour) stopTour(); else startTour();
   });
 
-  picker.addEventListener('change', function () {
-    if (!byId.has(picker.value)) return;
-    stopTour(); dismissHint(); goTo(byId.get(picker.value), 700);
+  search.addEventListener('input', function () { stopTour(); updateSearch(); });
+  search.addEventListener('keydown', function (e) {
+    if (e.isComposing) return;
+    if (e.key === 'Enter' && matches.length) {
+      e.preventDefault(); chooseCountry(matches[0].index);
+    } else if (e.key === 'ArrowDown' && matches.length) {
+      e.preventDefault(); searchResults.querySelector('button').focus();
+    } else if (e.key === 'Escape') {
+      search.value = ''; closeSearch();
+    }
+  });
+  searchResults.addEventListener('keydown', function (e) {
+    var buttons = Array.from(searchResults.querySelectorAll('button'));
+    var index = buttons.indexOf(document.activeElement);
+    if (e.key === 'Escape' || (e.key === 'ArrowUp' && index === 0)) {
+      e.preventDefault(); search.focus();
+      if (e.key === 'Escape') closeSearch();
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      buttons[Math.max(0, Math.min(buttons.length - 1, index + (e.key === 'ArrowDown' ? 1 : -1)))].focus();
+    }
   });
 
   function coverage() {
     document.getElementById('globe-coverage').textContent = format('{total} countries · official languages by country', { total: count(COUNTRIES.length) });
   }
   coverage();
-  populatePicker();
-  picker.disabled = false;
-  prevBtn.disabled = false;
-  nextBtn.disabled = false;
+  search.disabled = false;
   tourBtn.disabled = mapped.length === 0;
 
   /* ---------- lifecycle ---------- */
@@ -527,7 +574,7 @@
   }
 
   if (I18N) I18N.onChange(function () {
-    readNames(); populatePicker(); paint(); coverage();
+    readNames(); updateSearch(); paint(); coverage();
     tourBtn.textContent = t(tour ? 'Pause tour' : 'Start country tour');
   });
   paint();
