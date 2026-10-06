@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=4ff5cfe155">
+<link rel="stylesheet" href="styles.css?v=461bf8aac3">
 <script src="i18n.js?v=c3d230d2d3"></script>
 </head>
 <body>
@@ -260,43 +260,50 @@
     <div class="globe-wrap" id="globe">
       <div class="globe-stage">
         <canvas id="globe-canvas" data-i18n-dynamic tabindex="0" role="img"
-                aria-label="World language and dialect globe. Recorded locations appear as markers. Use the catalog below to browse all entries."></canvas>
-        <p class="globe-hint"><span>Drag to spin &middot; tap a point</span></p>
+                aria-label="Country globe. United States: English. Enable JavaScript to explore every country."></canvas>
+        <p class="globe-hint"><span>Drag to spin &middot; choose a country</span></p>
       </div>
-
       <div class="globe-panel">
-        <p class="globe-chips-label">The full worldwide catalog</p>
-        <p class="globe-coverage" id="globe-coverage" data-i18n-dynamic>21,944 entries &middot; 8,655 with recorded locations &middot; 13,289 without coordinates</p>
-        <ul class="globe-legend" aria-label="Map legend">
-          <li><span class="legend-language" aria-hidden="true"></span>Languages</li>
-          <li><span class="legend-dialect" aria-hidden="true"></span>Dialects</li>
-          <li><span class="legend-selected" aria-hidden="true"></span>Selected</li>
-        </ul>
-        <div class="globe-read" aria-live="polite" aria-atomic="true">
-          <p class="globe-tier" id="globe-tier" data-i18n-dynamic>Reference catalog</p>
-          <p class="globe-country" id="globe-country" data-i18n-dynamic>Explore a language or dialect</p>
-          <p class="globe-word is-catalog-name" id="globe-word" data-i18n-dynamic>Every voice</p>
-          <p class="globe-meta" id="globe-language" data-i18n-dynamic>Enable JavaScript to explore the globe, or download the catalog below.</p>
+        <p class="globe-chips-label">Official languages around the world</p>
+        <p class="globe-coverage" id="globe-coverage" data-i18n-dynamic>197 countries &middot; official languages by country</p>
+        <label class="country-picker-label" for="globe-country-select">Choose a country</label>
+        <select id="globe-country-select" class="country-picker" data-i18n-dynamic disabled>
+          <option value="US">United States</option>
+        </select>
+        <div class="globe-read country-read" aria-live="polite" aria-atomic="true">
+          <h3 class="country-name" id="globe-country" data-i18n-dynamic>United States</h3>
+          <div id="globe-language-groups" class="country-language-groups" data-i18n-dynamic>
+            <div><h4>Official languages</h4><ul class="country-language-list"><li>English</li></ul></div>
+          </div>
+          <p class="globe-note" id="globe-notes" data-i18n-dynamic></p>
           <p class="globe-position" id="globe-position" data-i18n-dynamic></p>
         </div>
-        <p class="globe-source"><a id="globe-source" data-i18n-dynamic href="https://glottolog.org/">View the source catalog</a></p>
+        <details class="country-regional" id="globe-regional" hidden>
+          <summary>Regional designations in the reference</summary>
+          <ul id="globe-regional-list" lang="en" data-i18n-dynamic></ul>
+        </details>
+        <p class="globe-source"><a id="globe-source" data-i18n-dynamic href="country-languages.json">Country language source</a></p>
         <div class="globe-controls">
-          <button type="button" class="globe-btn" id="globe-prev" aria-label="Previous catalog entry" disabled>&#8592;</button>
-          <button type="button" class="globe-btn" id="globe-next" aria-label="Next catalog entry" disabled>&#8594;</button>
-          <button type="button" class="globe-btn globe-btn-wide" id="globe-tour" data-i18n-dynamic aria-pressed="true" disabled>Pause tour</button>
+          <button type="button" class="globe-btn" id="globe-prev" aria-label="Previous country" disabled>&#8592;</button>
+          <button type="button" class="globe-btn" id="globe-next" aria-label="Next country" disabled>&#8594;</button>
+          <button type="button" class="globe-btn globe-btn-wide" id="globe-tour" data-i18n-dynamic aria-pressed="false" disabled>Start country tour</button>
         </div>
-        <p class="globe-note">Arrows browse every entry. The tour visits mapped locations.
-          Entries without coordinates can still be selected; their location is shown as unknown.
-          Markers show representative locations and may overlap.</p>
-        <a class="globe-search-link" href="#language-catalog">Search all languages and dialects &darr;</a>
+        <p class="globe-note">One marker per country. Official, de facto and working languages have
+          separate labels. Regional designations appear separately where recorded.</p>
       </div>
     </div>
+    <p class="catalog-source country-attribution">Country language reference adapted from
+      <a href="https://en.wikipedia.org/w/index.php?title=List_of_official_languages_by_country_and_territory&amp;oldid=1377657223">Wikipedia contributors</a>
+      under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>, with linked corrections;
+      locations from <a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth</a> (public domain).
+      <a href="country-languages.json" download>Country data, scope and sources</a> &middot; Updated October 6, 2026.
+      Language status is a reference, not a detector support claim.</p>
 
     <div class="language-catalog" id="language-catalog">
       <h3>Explore the worldwide catalog</h3>
       <p>Search by name, parent variety, ISO 639-3 code or Glottocode. These are reference
-        entries, not a list of supported models. A location is a representative point,
-        not a language boundary. Varieties without coordinates remain searchable.</p>
+        entries, not a list of supported models. This full language-and-dialect inventory
+        is broader than the country globe above.</p>
       <div class="catalog-filters" id="catalog-filters" hidden>
         <div><label for="language-search">Find a language or dialect</label>
           <input type="search" id="language-search" placeholder="Try English, Cantonese or eng" aria-controls="catalog-results" autocomplete="off"></div>
@@ -587,9 +594,10 @@
 </footer>
 
 <script src="globe-land.js?v=3cd4155b97" defer></script>
+<script src="country-languages.js?v=ccd7e256e4" defer></script>
+<script src="globe.js?v=1b08f63696" defer></script>
 <script src="language-catalog.js?v=98963e0c17" defer></script>
-<script src="globe.js?v=93bf958b9d" defer></script>
-<script src="languages.js?v=e50de3b28c" defer></script>
+<script src="languages.js?v=440882dce4" defer></script>
 <script src="main.js?v=5ee04a7774" defer></script>
 <script src="order.js?v=08d0ecc517" defer></script>
 </body>

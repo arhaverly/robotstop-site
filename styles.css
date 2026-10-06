@@ -1373,6 +1373,20 @@ a { color: inherit; text-decoration: none; }
 .globe-hint { white-space: nowrap; }
 .globe-meta { overflow-wrap: anywhere; }
 .globe-controls .globe-btn-wide { height: auto; min-height: 38px; }
+.country-picker-label { display: block; margin: 20px 0 8px; font-size: 13px; color: var(--muted); }
+.country-picker { width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 7px; background: var(--paper); color: var(--text); font: inherit; }
+.country-read { margin-top: 24px; }
+.country-name { font-size: clamp(28px, 4vw, 40px); line-height: 1.15; letter-spacing: -.03em; overflow-wrap: anywhere; }
+.country-language-groups > div { margin-top: 20px; }
+.country-language-groups h4 { font-size: 12px; color: var(--muted); font-weight: 500; }
+.country-language-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; max-height: 280px; overflow-y: auto; }
+.country-language-list li { padding: 7px 11px; border: 1px solid var(--line); border-radius: 6px; font-size: 17px; overflow-wrap: anywhere; }
+.country-regional { margin-top: 20px; color: var(--muted); font-size: 13px; }
+.country-regional summary { cursor: pointer; }
+.country-regional ul { margin-top: 12px; max-height: 220px; overflow-y: auto; }
+.country-regional li { padding: 5px 0; }
+.country-attribution { max-width: 90ch; margin-top: 28px; color: var(--muted); }
+.country-attribution a { text-decoration: underline; text-underline-offset: 3px; }
 .catalog-filters[hidden], .catalog-pagination[hidden] { display: none; }
 @media (max-width: 900px) { .catalog-results { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .catalog-filters, .catalog-results { grid-template-columns: 1fr; } }

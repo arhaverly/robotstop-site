@@ -1,6 +1,6 @@
-/* Worldwide language globe. All catalog entries are navigable; only recorded
- * coordinates are plotted. Marker vectors are precomputed and drawn in batches.
- * Land outlines come from globe-land.js (Natural Earth 110m).
+/* Country globe: one representative marker per country, with official and
+ * other language designations kept separate. Data: country-languages.js.
+ * Natural Earth coastlines and the full language catalog remain separate.
  */
 (function () {
   'use strict';
@@ -14,7 +14,7 @@
   var canvas = document.getElementById('globe-canvas');
   if (!wrap || !canvas || !canvas.getContext) return;
 
-  var catalog = window.ROBOTSTOP_CATALOG;
+  var catalog = window.ROBOTSTOP_COUNTRIES;
   if (!catalog || !catalog.records.length) return;
   var ctx = canvas.getContext('2d');
   if (!ctx) return;
@@ -23,11 +23,11 @@
   var TAU = Math.PI * 2;
   var DEG = Math.PI / 180;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var LANGS = catalog.records;
+  var COUNTRIES = catalog.records;
   var byId = new Map();
   var mapped = [];
   var points = new Map();
-  LANGS.forEach(function (record, i) {
+  COUNTRIES.forEach(function (record, i) {
     byId.set(record.id, i);
     if (!hasLocation(record)) return;
     var lat = record.lat * DEG, lon = record.lon * DEG;
@@ -44,13 +44,44 @@
   var mappedPosition = new Map(mapped.map(function (p, i) { return [p.index, i]; }));
 
   var out = {
-    tier: document.getElementById('globe-tier'),
     country: document.getElementById('globe-country'),
-    word: document.getElementById('globe-word'),
-    language: document.getElementById('globe-language'),
+    languages: document.getElementById('globe-language-groups'),
+    notes: document.getElementById('globe-notes'),
+    regional: document.getElementById('globe-regional'),
+    regionalList: document.getElementById('globe-regional-list'),
     position: document.getElementById('globe-position'),
     source: document.getElementById('globe-source')
   };
+  var picker = document.getElementById('globe-country-select');
+  var regionNames, languageNames;
+  function readNames() {
+    try {
+      var locale = I18N ? I18N.lang() : 'en';
+      regionNames = new Intl.DisplayNames([locale], { type: 'region', fallback: 'none' });
+      languageNames = new Intl.DisplayNames([locale], { type: 'language', fallback: 'none' });
+    } catch (_) { regionNames = null; languageNames = null; }
+  }
+  function countryName(country) {
+    return (regionNames && regionNames.of(country.id)) || country.name;
+  }
+  function languageName(name) {
+    var tag = catalog.languageTags[name];
+    if (tag && languageNames) {
+      try { return languageNames.of(tag) || t(name); } catch (_) { /* retain source name */ }
+    }
+    return t(name);
+  }
+  function populatePicker() {
+    picker.replaceChildren();
+    COUNTRIES.forEach(function (country) {
+      var option = document.createElement('option');
+      option.value = country.id;
+      option.textContent = countryName(country);
+      picker.appendChild(option);
+    });
+    picker.value = COUNTRIES[sel].id;
+  }
+  readNames();
   var prevBtn = document.getElementById('globe-prev');
   var nextBtn = document.getElementById('globe-next');
   var tourBtn = document.getElementById('globe-tour');
@@ -58,17 +89,14 @@
 
   /* ---------- state ---------- */
 
-  var uiLanguage = document.documentElement.lang;
-  var startISO = uiLanguage === 'es' ? 'spa' : /^zh/.test(uiLanguage) ? 'cmn' : 'eng';
-  var START = LANGS.findIndex(function (record) { return record.iso === startISO; });
-  if (START < 0) START = 0;
+  var START = byId.has('US') ? byId.get('US') : 0;
   var sel = START;
-  var rot = hasLocation(LANGS[START]) ? -LANGS[START].lon : 0;                    // degrees; view centre is lon -rot
-  var tilt = hasLocation(LANGS[START]) ? LANGS[START].lat : 0;                    // degrees; view centre is lat tilt
+  var rot = hasLocation(COUNTRIES[START]) ? -COUNTRIES[START].lon : 0;                    // degrees; view centre is lon -rot
+  var tilt = hasLocation(COUNTRIES[START]) ? COUNTRIES[START].lat : 0;                    // degrees; view centre is lat tilt
   var vel = 0;
   var dragging = false, moved = 0, lastX = 0, lastY = 0;
   var anim = null;
-  var tour = !reduced && mapped.length > 0;
+  var tour = false; // Let the United States / English introduction remain readable.
   var dwellFrom = 0;
   var raf = null, onScreen = true;
   var W = 0, H = 0, R = 0, cx = 0, cy = 0;
@@ -170,20 +198,15 @@
   function markers() {
     var cr = Math.cos(rot * DEG), sr = Math.sin(rot * DEG);
     var ct = Math.cos(tilt * DEG), st = Math.sin(tilt * DEG);
-    // Two batched paths avoid thousands of individual canvas fill operations.
-    ['language', 'dialect'].forEach(function (level) {
-      var radius = level === 'language' ? 1.6 : 2.2;
-      ctx.fillStyle = level === 'language' ? 'rgba(255,101,85,.72)' : 'rgba(105,208,238,.9)';
-      ctx.beginPath();
-      mapped.forEach(function (point) {
-        if (LANGS[point.index].level !== level) return;
-        var p = markerProjection(point, cr, sr, ct, st);
-        if (p.z <= 0.02) return;
-        ctx.moveTo(p.x + radius, p.y);
-        ctx.arc(p.x, p.y, radius, 0, TAU);
-      });
-      ctx.fill();
+    ctx.fillStyle = 'rgba(255,101,85,.85)';
+    ctx.beginPath();
+    mapped.forEach(function (point) {
+      var p = markerProjection(point, cr, sr, ct, st);
+      if (p.z <= 0.02) return;
+      ctx.moveTo(p.x + 2.8, p.y);
+      ctx.arc(p.x, p.y, 2.8, 0, TAU);
     });
+    ctx.fill();
     var selected = points.get(sel);
     if (!selected) return;
     var p = markerProjection(selected, cr, sr, ct, st);
@@ -256,7 +279,7 @@
     var best = sel, bd = Infinity;
     for (var i = 0; i < mapped.length; i++) {
       var index = mapped[i].index;
-      var d = angularDistance(LANGS[index].lon, LANGS[index].lat);
+      var d = angularDistance(COUNTRIES[index].lon, COUNTRIES[index].lat);
       if (d < bd) { bd = d; best = index; }
     }
     return best;
@@ -269,26 +292,53 @@
   }
 
   function paint() {
-    var L = LANGS[sel];
-    out.tier.textContent = t(L.level) + ' · ' + t('Reference catalog');
-    out.country.textContent = hasLocation(L) ?
-      format('Representative location · {lat}°, {lon}°', { lat: L.lat.toFixed(2), lon: L.lon.toFixed(2) }) :
-      t('Location unknown · no marker plotted');
-    out.word.textContent = L.name;
-    out.language.textContent = L.id + (L.iso ? ' · ISO ' + L.iso : '') +
-      (L.parent ? ' · ' + L.parent : '');
-    out.position.textContent = format('Entry {position} of {total}', { position: count(sel + 1), total: count(LANGS.length) });
-    out.source.href = 'https://glottolog.org/resource/languoid/id/' + L.id;
-    out.source.textContent = format('View {name} in Glottolog', { name: L.name });
-    canvas.setAttribute('aria-label', format('World language and dialect globe. Selected: {name}. {location} Drag to spin, click a marker, or use arrow keys to browse all {total} entries.', {
-      name: L.name, location: hasLocation(L) ? t('Representative location highlighted.') : t('Location unknown; no marker plotted.'), total: count(LANGS.length)
+    var country = COUNTRIES[sel];
+    var name = countryName(country);
+    out.country.textContent = name;
+    out.languages.replaceChildren();
+    var groups = [
+      ['official', 'Official languages'], ['deFacto', 'De facto languages'],
+      ['working', 'Working languages'], ['national', 'National languages']
+    ];
+    groups.forEach(function (group) {
+      if (!country[group[0]].length) return;
+      var section = document.createElement('div');
+      var heading = document.createElement('h4');
+      heading.textContent = t(group[1]);
+      var list = document.createElement('ul');
+      list.className = 'country-language-list';
+      country[group[0]].forEach(function (language) {
+        var item = document.createElement('li');
+        item.textContent = languageName(language);
+        list.appendChild(item);
+      });
+      section.append(heading, list);
+      out.languages.appendChild(section);
+    });
+    out.notes.textContent = country.notes.map(t).join(' ');
+    out.notes.hidden = !country.notes.length;
+    out.regional.hidden = !country.regional.length;
+    out.regional.open = false;
+    out.regionalList.replaceChildren();
+    country.regional.forEach(function (language) {
+      var item = document.createElement('li');
+      item.textContent = language;
+      out.regionalList.appendChild(item);
+    });
+    out.position.textContent = format('Country {position} of {total}', { position: count(sel + 1), total: count(COUNTRIES.length) });
+    out.source.href = country.sources[0];
+    out.source.textContent = t('Country language source');
+    picker.value = country.id;
+    canvas.setAttribute('aria-label', format('Country globe. Selected: {name}. Languages: {languages}. Drag to spin, click a marker, or use arrow keys to browse {total} countries.', {
+      name: name, languages: ['official', 'deFacto', 'working', 'national'].flatMap(function (key) { return country[key]; }).map(languageName).join(', '),
+      total: count(COUNTRIES.length)
     }));
   }
 
   /* ---------- motion ---------- */
 
   function goTo(i, dur) {
-    var L = LANGS[i];
+    var L = COUNTRIES[i];
     vel = 0;
     if (!hasLocation(L)) {
       anim = null;
@@ -318,7 +368,7 @@
     if (!tour) return;
     tour = false;
     tourBtn.setAttribute('aria-pressed', 'false');
-    tourBtn.textContent = t('Tour mapped entries');
+    tourBtn.textContent = t('Start country tour');
   }
 
   function startTour() {
@@ -403,7 +453,7 @@
       var hit = -1, hd = 26;
       for (var i = 0; i < mapped.length; i++) {
         var index = mapped[i].index;
-        var p = project(LANGS[index].lon, LANGS[index].lat);
+        var p = project(COUNTRIES[index].lon, COUNTRIES[index].lat);
         if (p.z <= 0.02) continue;
         var d = Math.sqrt((p.x - px) * (p.x - px) + (p.y - py) * (p.y - py));
         if (d < hd) { hd = d; hit = index; }
@@ -417,7 +467,7 @@
   canvas.addEventListener('pointercancel', function () { dragging = false; kick(); });
 
   canvas.addEventListener('keydown', function (e) {
-    var n = LANGS.length, k = e.key;
+    var n = COUNTRIES.length, k = e.key;
     if (k === 'ArrowRight' || k === 'ArrowDown') { stopTour(); goTo((sel + 1) % n, 600); }
     else if (k === 'ArrowLeft' || k === 'ArrowUp') { stopTour(); goTo((sel - 1 + n) % n, 600); }
     else return;
@@ -426,29 +476,26 @@
   });
 
   prevBtn.addEventListener('click', function () {
-    stopTour(); dismissHint(); goTo((sel - 1 + LANGS.length) % LANGS.length, 600);
+    stopTour(); dismissHint(); goTo((sel - 1 + COUNTRIES.length) % COUNTRIES.length, 600);
   });
   nextBtn.addEventListener('click', function () {
-    stopTour(); dismissHint(); goTo((sel + 1) % LANGS.length, 600);
+    stopTour(); dismissHint(); goTo((sel + 1) % COUNTRIES.length, 600);
   });
   tourBtn.addEventListener('click', function () {
     if (tour) stopTour(); else startTour();
   });
 
-  document.addEventListener('robotstop:locate', function (event) {
-    var record = event.detail;
-    if (!record || !byId.has(record.id)) return;
-    stopTour();
-    dismissHint();
-    goTo(byId.get(record.id), 700);
+  picker.addEventListener('change', function () {
+    if (!byId.has(picker.value)) return;
+    stopTour(); dismissHint(); goTo(byId.get(picker.value), 700);
   });
 
   function coverage() {
-    document.getElementById('globe-coverage').textContent = format('{total} entries · {mapped} with recorded locations · {unknown} without coordinates', {
-      total: count(LANGS.length), mapped: count(mapped.length), unknown: count(LANGS.length - mapped.length)
-    });
+    document.getElementById('globe-coverage').textContent = format('{total} countries · official languages by country', { total: count(COUNTRIES.length) });
   }
   coverage();
+  populatePicker();
+  picker.disabled = false;
   prevBtn.disabled = false;
   nextBtn.disabled = false;
   tourBtn.disabled = mapped.length === 0;
@@ -474,14 +521,14 @@
     else if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
   });
 
-  if (reduced && tourBtn) {
+  if (!tour && tourBtn) {
     tourBtn.setAttribute('aria-pressed', 'false');
-    tourBtn.textContent = t('Tour mapped entries');
+    tourBtn.textContent = t('Start country tour');
   }
 
   if (I18N) I18N.onChange(function () {
-    paint(); coverage();
-    tourBtn.textContent = t(tour ? 'Pause tour' : 'Tour mapped entries');
+    readNames(); populatePicker(); paint(); coverage();
+    tourBtn.textContent = t(tour ? 'Pause tour' : 'Start country tour');
   });
   paint();
   resize();

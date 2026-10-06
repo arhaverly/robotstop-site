@@ -37,23 +37,6 @@
       detail.textContent = t(record.level) + ' · ' + record.id + (record.iso ? ' · ' + record.iso : '') +
         (record.parent ? ' · ' + record.parent : '');
       item.append(name, detail);
-      var locate = document.createElement('button');
-      locate.type = 'button';
-      locate.className = 'catalog-locate';
-      locate.textContent = record.lat !== null && record.lon !== null ? t('Show on globe') : t('View entry in globe explorer');
-      locate.setAttribute('aria-label', format('Explore {name} on globe', { name: record.name }));
-      locate.addEventListener('click', function () {
-        document.dispatchEvent(new CustomEvent('robotstop:locate', { detail: record }));
-        document.getElementById('globe').scrollIntoView({ block: 'center', behavior: 'auto' });
-        document.getElementById('globe-canvas').focus({ preventScroll: true });
-      });
-      item.append(locate);
-      if (record.lat === null || record.lon === null) {
-        var location = document.createElement('span');
-        location.className = 'catalog-location';
-        location.textContent = t('No coordinates in catalog');
-        item.append(location);
-      }
       results.append(item);
     });
     prev.disabled = page === 0;
