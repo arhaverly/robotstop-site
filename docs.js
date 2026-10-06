@@ -3,6 +3,8 @@
 (function () {
   'use strict';
 
+  var t = window.RobotStopI18n ? window.RobotStopI18n.t : function (s) { return s; };
+
   document.querySelectorAll('pre.code').forEach(function (pre) {
     var code = pre.querySelector('code');
     if (!code || !navigator.clipboard) return;
@@ -10,24 +12,31 @@
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'copy';
-    btn.textContent = 'Copy';
-    btn.setAttribute('aria-label', 'Copy this to the clipboard');
+    btn.textContent = t('Copy');
+    btn.setAttribute('data-i18n-dynamic', '');
+    btn.setAttribute('aria-label', t('Copy this to the clipboard'));
     btn.addEventListener('click', function () {
       // innerText, not textContent: it drops the inline comment spans the way
       // a reader would, and keeps the line breaks.
       navigator.clipboard.writeText(code.innerText.replace(/\s+$/, '')).then(
         function () {
-          btn.textContent = 'Copied';
+          btn.textContent = t('Copied');
           btn.classList.add('is-done');
           setTimeout(function () {
-            btn.textContent = 'Copy';
+            btn.textContent = t('Copy');
             btn.classList.remove('is-done');
           }, 1600);
         },
-        function () { btn.textContent = 'Press Cmd-C'; }
+        function () { btn.textContent = t('Press Cmd-C'); }
       );
     });
     pre.appendChild(btn);
+    if (window.RobotStopI18n) {
+      window.RobotStopI18n.onChange(function () {
+        if (!btn.classList.contains('is-done')) btn.textContent = t('Copy');
+        btn.setAttribute('aria-label', t('Copy this to the clipboard'));
+      });
+    }
   });
 
   var links = Array.prototype.slice.call(

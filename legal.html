@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<script src="i18n.js"></script>
 </head>
 <body class="docs">
 
@@ -20,12 +21,14 @@
   <div class="shell nav-inner">
     <a class="brand" href="index.html" aria-label="RobotStop home">
       <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M11 3h10l8 8v10l-8 8H11l-8-8V11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-        <rect x="13" y="13" width="6" height="6" rx="1" fill="currentColor"/>
+        <path d="M10.822 3.5 L21.178 3.5 L28.5 10.822 L28.5 21.178 L21.178 28.5 L10.822 28.5 L3.5 21.178 L3.5 10.822 Z" fill="none" stroke="currentColor" stroke-width="3.00" stroke-linejoin="round"/>
+        <path d="M7.25 13.464 L14.625 15.161 L14.625 18.536 L7.25 16.839 Z" fill="currentColor"/>
+        <path d="M24.75 13.464 L17.375 15.161 L17.375 18.536 L24.75 16.839 Z" fill="currentColor"/>
       </svg>
-      <span class="brand-word">Robot<span class="brand-word-accent">Stop</span></span>
+      <span class="brand-word" translate="no">Robot<span class="brand-word-accent">Stop</span></span>
       <span class="brand-tag">Legal</span>
     </a>
+    <div class="nav-lang" data-lang-picker></div>
     <a class="btn btn-sm btn-primary" href="index.html#contact">Contact us</a>
   </div>
 </header>
@@ -40,6 +43,10 @@
       Every emergency stop, guard, light curtain, interlock, procedure and
       training requirement you have today stays exactly as it is. RobotStop is
       added on top of them and is useful only while they remain in place.
+    </p>
+    <p class="i18n-note">
+      Translations of this page are provided for convenience. If a translation
+      and the English text differ, the English text governs.
     </p>
   </div>
 </section>
@@ -233,7 +240,7 @@
 <footer class="footer">
   <div class="shell footer-inner">
     <div class="footer-brand">
-      <span class="brand-word">Robot<span class="brand-word-accent">Stop</span></span>
+      <span class="brand-word" translate="no">Robot<span class="brand-word-accent">Stop</span></span>
       <p>Voice stop-request modules for physical AI.</p>
       <p class="footer-links">
         <a href="index.html">Home</a> &middot;
@@ -249,5 +256,6 @@
   </div>
 </footer>
 
+<script src="main.js" defer></script>
 </body>
 </html>

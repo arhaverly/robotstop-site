@@ -1339,3 +1339,77 @@ a { color: inherit; text-decoration: none; }
 /* The shared model: one block, filled, so the picture shows both channels
    using the same thing rather than two lookalikes. */
 .dg-box-shared rect { fill: var(--sand); stroke: var(--ink); stroke-width: 1.4; }
+
+/* ---------- language ---------- */
+
+/* Held invisible for the moment between first paint and the translation
+   landing, so a Spanish or Chinese reader never sees a flash of English.
+   i18n.js lifts it, with a timeout as a backstop. */
+html.i18n-wait body { visibility: hidden; }
+
+.nav-lang { margin-left: auto; display: flex; }
+.nav-links + .nav-lang { margin-left: 0; }
+.nav-lang + .btn-primary,
+.docs .nav-inner > .nav-lang + .btn { margin-left: 0; }
+@media (max-width: 900px) { .nav-links + .nav-lang { margin-left: auto; } }
+
+.lang {
+  position: relative; display: inline-flex; align-items: center;
+  height: 40px; color: rgba(255, 255, 255, .72);
+  border: 1px solid var(--line-dark); border-radius: 8px;
+  transition: border-color .15s var(--ease), color .15s var(--ease);
+}
+.lang:hover, .lang:focus-within { color: #fff; border-color: rgba(255, 255, 255, .4); }
+.lang-icon { position: absolute; left: 11px; width: 15px; height: 15px; pointer-events: none; }
+.lang::after {
+  content: ''; position: absolute; right: 12px; top: 50%;
+  width: 6px; height: 6px; margin-top: -5px; pointer-events: none;
+  border-right: 1.4px solid currentColor; border-bottom: 1.4px solid currentColor;
+  transform: rotate(45deg);
+}
+.lang-select {
+  appearance: none; -webkit-appearance: none;
+  height: 100%; padding: 0 30px 0 33px;
+  background: transparent; border: 0; border-radius: 8px;
+  color: inherit; font: 500 14px/1 var(--sans); cursor: pointer;
+}
+.lang-select:focus-visible { outline: 2px solid var(--accent-hi); outline-offset: 2px; }
+.lang-select option { color: var(--text); background: var(--paper); }
+/* Section links drop out whenever they would not fit on one row, which in
+   Spanish happens well before 900px. main.js measures and sets .nav-tight. */
+.nav-links a { white-space: nowrap; }
+.nav-tight .nav-links, .nav-bare .brand-tag { display: none; }
+.nav-tight .nav-links + .nav-lang { margin-left: auto; }
+
+/* Compact picker: just its globe icon, on phones and whenever main.js finds
+   the nav short of room (.nav-compact). The native list still opens with full
+   language names, and the select keeps its aria-label. */
+.nav-compact .lang { width: 40px; justify-content: center; }
+.nav-compact .lang::after { display: none; }
+.nav-compact .lang-icon { left: 12px; width: 16px; height: 16px; }
+.nav-compact .lang-select { width: 40px; padding: 0; color: transparent; }
+@media (max-width: 560px) {
+  .nav-inner { gap: 10px; }
+  .lang { width: 40px; justify-content: center; }
+  .lang::after { display: none; }
+  .lang-icon { left: 12px; width: 16px; height: 16px; }
+  .lang-select { width: 40px; padding: 0; color: transparent; }
+  .nav .btn-sm { padding: 0 14px; white-space: nowrap; }
+}
+
+/* Chinese: system CJK faces after Inter (Inter carries the Latin and digits),
+   and none of the negative tracking tuned for Latin display type. */
+html:lang(zh-Hans) { --sans: 'Inter', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Source Han Sans SC', 'Noto Sans SC', sans-serif; }
+html:lang(zh-Hant) { --sans: 'Inter', 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans CJK TC', 'Source Han Sans TC', 'Noto Sans TC', sans-serif; }
+html:lang(zh-Hans) { --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Noto Sans SC', monospace; }
+html:lang(zh-Hant) { --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans CJK TC', 'Noto Sans TC', monospace; }
+html:lang(zh-Hans) h1, html:lang(zh-Hans) h2, html:lang(zh-Hans) h3,
+html:lang(zh-Hant) h1, html:lang(zh-Hant) h2, html:lang(zh-Hant) h3,
+html:lang(zh-Hans) .hero-title, html:lang(zh-Hant) .hero-title,
+html:lang(zh-Hans) .h2, html:lang(zh-Hant) .h2,
+html:lang(zh-Hans) .docs-title, html:lang(zh-Hant) .docs-title { letter-spacing: 0; line-height: 1.25; }
+html:lang(zh-Hans) body, html:lang(zh-Hant) body { line-height: 1.75; }
+
+/* The governing-language note on the legal page only matters in translation. */
+.i18n-note { margin-top: 1rem; font-size: 14px; opacity: .7; }
+html:lang(en) .i18n-note { display: none; }

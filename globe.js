@@ -21,6 +21,15 @@
   var TAU = Math.PI * 2;
   var DEG = Math.PI / 180;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var I18N = window.RobotStopI18n;
+  var t = I18N ? I18N.t : function (s) { return s; };
+  // The page's mono stack, which carries a CJK fallback on Chinese pages.
+  var labelFont;
+  function readFont() {
+    labelFont = getComputedStyle(document.documentElement).getPropertyValue('--mono').trim() ||
+      'ui-monospace, SFMono-Regular, Menlo, monospace';
+  }
+  readFont();
 
   var LANGS = chips.map(function (el) {
     var d = el.getAttribute.bind(el);
@@ -51,7 +60,14 @@
 
   /* ---------- state ---------- */
 
-  var START = 1;                                  // United States, reading "stop"
+  // Open on the visitor's own language: United States ("stop") by default.
+  var UI_TAG = { es: 'es', 'zh-Hans': 'zh', 'zh-Hant': 'zh' };
+  function startFor(code) {
+    var tag = UI_TAG[code] || 'en';
+    for (var i = 0; i < LANGS.length; i++) if (LANGS[i].tag === tag) return i;
+    return 1;
+  }
+  var START = startFor(I18N ? I18N.lang() : 'en');
   var sel = START;
   var rot = -LANGS[START].lon;                    // degrees; view centre is lon -rot
   var tilt = LANGS[START].lat;                    // degrees; view centre is lat tilt
@@ -172,9 +188,9 @@
       ctx.globalAlpha = 1;
     }
     if (here) {
-      ctx.font = '600 10px ui-monospace, SFMono-Regular, Menlo, monospace';
+      ctx.font = '600 10px ' + labelFont;
       ctx.textBaseline = 'middle';
-      var label = here.L.country.toUpperCase();
+      var label = t(here.L.country).toUpperCase();
       var right = here.p.x + 20 + ctx.measureText(label).width < W;
       ctx.textAlign = right ? 'left' : 'right';
       ctx.fillStyle = 'rgba(255,255,255,.92)';
@@ -252,13 +268,13 @@
 
   function paint() {
     var L = LANGS[sel];
-    out.tier.textContent = L.tier === 'A' ? 'Tier A · qualified' : 'Tier B · beta';
+    out.tier.textContent = t(L.tier === 'A' ? 'Tier A · qualified' : 'Tier B · beta');
     out.tier.className = 'globe-tier' + (L.tier === 'B' ? ' is-beta' : '');
-    out.country.textContent = L.country;
+    out.country.textContent = t(L.country);
     out.word.textContent = L.word;
     out.word.setAttribute('lang', L.tag);
     out.word.setAttribute('dir', L.tag === 'ar' ? 'rtl' : 'ltr');
-    out.language.textContent = L.language;
+    out.language.textContent = t(L.language);
     out.roman.textContent = L.roman ? '“' + L.roman + '”' : '';
     for (var i = 0; i < LANGS.length; i++) {
       LANGS[i].el.setAttribute('aria-pressed', i === sel ? 'true' : 'false');
@@ -290,13 +306,13 @@
     if (!tour) return;
     tour = false;
     tourBtn.setAttribute('aria-pressed', 'false');
-    tourBtn.textContent = 'Resume tour';
+    tourBtn.textContent = t('Resume tour');
   }
 
   function startTour() {
     tour = true;
     tourBtn.setAttribute('aria-pressed', 'true');
-    tourBtn.textContent = 'Pause tour';
+    tourBtn.textContent = t('Pause tour');
     dwellFrom = 0;
     kick();
   }
@@ -430,7 +446,17 @@
 
   if (reduced && tourBtn) {
     tourBtn.setAttribute('aria-pressed', 'false');
-    tourBtn.textContent = 'Resume tour';
+    tourBtn.textContent = t('Resume tour');
+  }
+
+  if (I18N) {
+    I18N.onChange(function (code) {
+      readFont();
+      tourBtn.textContent = t(tour ? 'Pause tour' : 'Resume tour');
+      paint();
+      var i = startFor(code);
+      if (i !== sel) { stopTour(); goTo(i, 900); } else kick();
+    });
   }
 
   paint();

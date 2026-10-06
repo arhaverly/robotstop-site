@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RobotStop — the voice stop for robots you already own</title>
-<meta name="description" content="RobotStop is a voice-activated stop-request module that bolts onto a robot you already own. On-device detection, no cloud, no network. Free developer samples.">
+<meta name="description" content="RobotStop is a voice-activated stop-request module that bolts onto a robot you already own. Two independent channels, on-device detection, no cloud. $20 per detector.">
 <meta name="theme-color" content="#0a0c0d">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta property="og:title" content="RobotStop — say stop, it stops">
@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<script src="i18n.js"></script>
 </head>
 <body>
 
@@ -23,10 +24,11 @@
   <div class="shell nav-inner">
     <a class="brand" href="#top" aria-label="RobotStop home">
       <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M11 3h10l8 8v10l-8 8H11l-8-8V11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-        <rect x="13" y="13" width="6" height="6" rx="1" fill="currentColor"/>
+        <path d="M10.822 3.5 L21.178 3.5 L28.5 10.822 L28.5 21.178 L21.178 28.5 L10.822 28.5 L3.5 21.178 L3.5 10.822 Z" fill="none" stroke="currentColor" stroke-width="3.00" stroke-linejoin="round"/>
+        <path d="M7.25 13.464 L14.625 15.161 L14.625 18.536 L7.25 16.839 Z" fill="currentColor"/>
+        <path d="M24.75 13.464 L17.375 15.161 L17.375 18.536 L24.75 16.839 Z" fill="currentColor"/>
       </svg>
-      <span class="brand-word">Robot<span class="brand-word-accent">Stop</span></span>
+      <span class="brand-word" translate="no">Robot<span class="brand-word-accent">Stop</span></span>
     </a>
     <nav class="nav-links" aria-label="Sections">
       <a href="#why">Why</a>
@@ -37,6 +39,7 @@
       <a href="#standards">Standards</a>
       <a class="nav-link-alt" href="developers.html">Developers</a>
     </nav>
+    <div class="nav-lang" data-lang-picker></div>
     <a class="btn btn-sm btn-primary" href="#contact">Request a unit</a>
   </div>
 </header>
@@ -56,7 +59,7 @@
       no network. When anyone in the room says stop, power drops.
     </p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="#contact">Request a free sample</a>
+      <a class="btn btn-primary" href="#contact">Request a unit &mdash; $20</a>
       <a class="btn btn-ghost" href="#how">See how it works</a>
     </div>
     <p class="hero-notice">
@@ -242,16 +245,16 @@
 
       <div class="globe-panel">
         <div class="globe-read" aria-live="polite">
-          <p class="globe-tier" id="globe-tier">Tier A &middot; qualified</p>
-          <p class="globe-country" id="globe-country">United States</p>
-          <p class="globe-word" id="globe-word" lang="en">stop</p>
-          <p class="globe-meta"><span id="globe-language">English</span><span class="globe-roman" id="globe-roman"></span></p>
+          <p class="globe-tier" id="globe-tier" data-i18n-dynamic>Tier A &middot; qualified</p>
+          <p class="globe-country" id="globe-country" data-i18n-dynamic>United States</p>
+          <p class="globe-word" id="globe-word" data-i18n-dynamic lang="en">stop</p>
+          <p class="globe-meta"><span id="globe-language" data-i18n-dynamic>English</span><span class="globe-roman" id="globe-roman" data-i18n-dynamic></span></p>
         </div>
 
         <div class="globe-controls">
           <button type="button" class="globe-btn" id="globe-prev" aria-label="Previous language">&#8592;</button>
           <button type="button" class="globe-btn" id="globe-next" aria-label="Next language">&#8594;</button>
-          <button type="button" class="globe-btn globe-btn-wide" id="globe-tour" aria-pressed="true">Pause tour</button>
+          <button type="button" class="globe-btn globe-btn-wide" id="globe-tour" data-i18n-dynamic aria-pressed="true">Pause tour</button>
         </div>
 
         <p class="globe-chips-label">All eighteen, tap to jump</p>
@@ -375,18 +378,17 @@
         <header>
           <p class="price-tag">Out of the box</p>
           <h3>RobotStop Detector</h3>
-          <p class="price"><span class="price-num">Free</span><span class="price-unit">developer sample</span></p>
-          <p class="price-note">One per robot, while they last. $49 if you want to buy more without talking to us.</p>
+          <p class="price"><span class="price-num">$20</span><span class="price-unit">/ detector</span></p>
+          <p class="price-note">Today&rsquo;s price. It gets cheaper as volume grows.</p>
         </header>
         <ul class="feat">
           <li>Plug in, attach to the robot you already own</li>
-          <li>Listening from boot &mdash; no setup, no account, no network, no wake word</li>
-          <li>3.3&thinsp;V logic output, de-energize to stop &mdash; drive an optocoupler or a relay coil. <em>The OSSD pair and NC dry relay ship with the certified module.</em></li>
-          <li>USB-C: status, JSON per detection, and it types results as a USB keyboard with no driver</li>
-          <li>Red / green verdict LED</li>
-          <li><strong>English, uncertified, one detection path.</strong> A developer sample, not a safety device</li>
+          <li>Normally-closed dry contact wires into an existing protective-stop input</li>
+          <li>Listening from boot &mdash; no setup, no account, no network</li>
+          <li>USB-C for status, event log and firmware updates</li>
+          <li>Front-panel Ready / Stop / Fault indicators</li>
         </ul>
-        <a class="btn btn-outline" href="#contact">Request a sample</a>
+        <a class="btn btn-outline" href="#contact">Order detectors</a>
       </article>
 
       <article class="card card-price card-feature">
@@ -443,8 +445,8 @@
         <ul class="tick-list">
           <li>A supplementary protective measure: one more stop-request input to the safety-related control system your machine already has.</li>
           <li>Designed to an ISO 13849-1 Category 3 architecture, targeting PL d, so certification is possible without a redesign.</li>
-          <li>Frozen at release. No field learning, no drifting thresholds. Signed firmware and secure boot ship with the certified module.</li>
-          <li>Entirely local. No network connection, nothing outbound, no continuous audio stored. The radio on today&rsquo;s module is unused and disabled in firmware; the certified part will not have one.</li>
+          <li>Frozen at release. No field learning, no drifting thresholds; signed firmware and secure boot.</li>
+          <li>Entirely local. No radio transmitter, no outbound connection, no continuous audio stored.</li>
         </ul>
       </div>
       <div class="split-col">
@@ -506,8 +508,8 @@
       takes &mdash; including when the answer is that you don&rsquo;t need us yet.
     </p>
     <div class="hero-actions cta-actions">
-      <a class="btn btn-primary btn-lg" href="mailto:robotstop.contact@gmail.com?subject=RobotStop%20enquiry">robotstop.contact@gmail.com</a>
-      <a class="btn btn-ghost btn-lg" href="mailto:robotstop.contact@gmail.com?subject=RobotStop%20developer%20sample">Request a developer sample</a>
+      <a class="btn btn-primary btn-lg" href="mailto:hello@robotstop.com?subject=RobotStop%20enquiry">hello@robotstop.com</a>
+      <a class="btn btn-ghost btn-lg" href="mailto:hello@robotstop.com?subject=RobotStop%20detector%20order">Order detectors &mdash; $20 each</a>
     </div>
   </div>
 </section>
@@ -517,7 +519,7 @@
 <footer class="footer">
   <div class="shell footer-inner">
     <div class="footer-brand">
-      <span class="brand-word">Robot<span class="brand-word-accent">Stop</span></span>
+      <span class="brand-word" translate="no">Robot<span class="brand-word-accent">Stop</span></span>
       <p>Voice stop-request modules for physical AI.</p>
       <p class="footer-links">
         <a href="developers.html">Developers</a> &middot;

@@ -35,15 +35,52 @@
       <path d="M11 3h10l8 8v10l-8 8H11l-8-8V11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
       <rect x="13" y="13" width="6" height="6" rx="1" fill="currentColor"/>
     </svg>
-    <h1>This page stopped.</h1>
-    <p>That address doesn&rsquo;t exist. Nothing else is wrong.</p>
-    <p><a class="btn" href="/robotstop-site/">Back to RobotStop</a></p>
-    <p><a class="quiet" href="mailto:robotstop.contact@gmail.com?subject=RobotStop%20broken%20link">Tell us what you were looking for</a></p>
-    <footer>
+    <h1 id="t-h">This page stopped.</h1>
+    <p id="t-p">That address doesn&rsquo;t exist. Nothing else is wrong.</p>
+    <p><a class="btn" id="t-back" href="/robotstop-site/">Back to RobotStop</a></p>
+    <p><a class="quiet" id="t-ask" href="mailto:robotstop.contact@gmail.com?subject=RobotStop%20broken%20link">Tell us what you were looking for</a></p>
+    <footer id="t-foot">
       RobotStop is a supplementary protective measure, is not an emergency stop
       device, and does not replace guarding, emergency stops, procedures or a
       risk assessment.
     </footer>
   </div>
+  <script>
+    /* Same language choice as i18n.js (saved pick, then the browser's list),
+       inlined because this page cannot rely on relative paths. */
+    (function () {
+      var T = {
+        'es': ['Esta página se detuvo.', 'Esa dirección no existe. Todo lo demás está bien.', 'Volver a RobotStop', 'Cuéntanos qué buscabas',
+               'RobotStop es una medida de protección complementaria, no es un dispositivo de paro de emergencia y no sustituye resguardos, paros de emergencia, procedimientos ni una evaluación de riesgos.'],
+        'zh-Hans': ['这个页面停了。', '这个地址不存在，其他一切正常。', '返回 RobotStop', '告诉我们你在找什么',
+               'RobotStop 是一种补充性保护措施，不是急停装置，不能替代防护装置、急停、作业规程或风险评估。'],
+        'zh-Hant': ['這個頁面停了。', '這個網址不存在，其他一切正常。', '回到 RobotStop', '告訴我們你在找什麼',
+               'RobotStop 是一種補充性保護措施，不是緊急停止裝置，不能取代防護裝置、緊急停止、作業程序或風險評估。']
+      };
+      function pick(tag) {
+        var t = String(tag || '').toLowerCase();
+        if (/^es\b/.test(t)) return 'es';
+        if (/^yue\b/.test(t) || /^zh-(hant|tw|hk|mo)\b/.test(t)) return 'zh-Hant';
+        if (/^zh\b/.test(t)) return 'zh-Hans';
+        if (/^en\b/.test(t)) return 'en';
+        return null;
+      }
+      var code = null;
+      try { code = new URLSearchParams(location.search).get('lang'); } catch (e) {}
+      if (!T[code] && code !== 'en') { try { code = localStorage.getItem('robotstop-lang'); } catch (e) { code = null; } }
+      if (!T[code] && code !== 'en') {
+        var list = navigator.languages || [navigator.language];
+        for (var i = 0; i < list.length && !code; i++) code = pick(list[i]);
+      }
+      var s = T[code];
+      if (!s) return;
+      document.documentElement.lang = code;
+      document.title = s[0] + ' — RobotStop';
+      ['t-h', 't-p', 't-back', 't-ask', 't-foot'].forEach(function (id, i) {
+        document.getElementById(id).textContent = s[i];
+      });
+      document.getElementById('t-back').href = '/robotstop-site/?lang=' + code;
+    })();
+  </script>
 </body>
 </html>
