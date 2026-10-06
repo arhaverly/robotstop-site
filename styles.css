@@ -1651,3 +1651,15 @@ html:lang(en) .i18n-note { display: none; }
 }
 .docs-body .volume-note-head { margin: 0; font-weight: 600; color: var(--text); }
 .docs-body .volume-note p + p { margin-top: 6px; font-size: 15px; }
+
+/* Per-unit chart, log x: the step and its labels, the $1 floor. */
+.bvb-plot .floor { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 1 4; opacity: .45; }
+.bvb-plot .ln-buy { stroke-linejoin: miter; stroke-linecap: butt; }
+.bvb-plot .buy-label { font-size: 13px; font-weight: 600; fill: #a81c15; }
+.bvb-plot .step-label { font-size: 12.5px; font-weight: 600; fill: var(--text); text-anchor: end; }
+.bvb-plot .step-value { font-size: 12px; fill: var(--muted); text-anchor: end; }
+.bvb-plot .step-tick { stroke: var(--ink); stroke-width: 1; opacity: 0; }
+.bvb-plot .note { font-size: 12px; fill: var(--muted); }
+.bvb-plot .note-build { fill: #2a6fb0; }
+.bvb-plot .even-label-end { text-anchor: end; }
+.bvb-plot .axis-title-y { text-anchor: middle; transform-box: fill-box; transform-origin: center; transform: rotate(-90deg); }

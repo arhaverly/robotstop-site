@@ -14,9 +14,10 @@
   var VOLUME_PRICE = 110;
   var HARDWARE = 100;
 
-  var W = 720, H = 380;
-  var M = { t: 22, r: 128, b: 50, l: 70 };
+  var W = 720, H = 400;
+  var M = { t: 26, r: 118, b: 52, l: 58 };
   var PW = W - M.l - M.r, PH = H - M.t - M.b;
+  var YMAX = 5;   // dollars per unit; building runs off the top below that
 
   var buyCost = function (n) {
     return (n > VOLUME_MIN ? n * VOLUME_PRICE : Math.max(0, n - 1) * PRICE) / 100;
@@ -30,79 +31,103 @@
     return vol > VOLUME_MIN ? vol : Math.ceil((e + PRICE / 100) * 100 / (PRICE - HARDWARE));
   };
 
-  // Smallest max >= v whose quarter is a round number, so ticks are round.
-  var nice = function (v) {
-    var q = Math.max(v, 1) / 4, p = Math.pow(10, Math.floor(Math.log10(q)));
-    var m = [1, 1.5, 2, 2.5, 3, 4, 5, 7.5, 10].filter(function (c) { return c * p >= q; })[0];
-    return m * p * 4;
-  };
   var k = function (n) {
-    if (n === 0) return '0';
     if (n < 1000) return String(Math.round(n));
     if (n >= 1e6) return +(n / 1e6).toFixed(2) + 'M';
     return +(n / 1000).toFixed(1) + 'k';
   };
   var usd = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+  var cents = function (n) { return n >= 10 ? usd(n) : '$' + n.toFixed(2); };
+  var round = function (n) { return n < 2000 ? n : Math.round(n / 1000) * 1000; };
 
-  // Domain for engineering cost e: x runs to twice the break-even point so the
-  // crossing sits mid-chart and the "later, building wins" half is visible.
+  // The chart is cost per unit against units shipped on a log axis, so the
+  // $2 -> $1.10 step at 10,000 sits mid-chart and building's falling cost per
+  // unit reads as a curve. x spans whole decades: from two below the earlier
+  // of the step and the crossing, to one past the crossing.
   var scales = function (e) {
     var even = breakEven(e);
-    var xMax = nice(Math.round(even * 2 / 1000) * 1000);
-    var yMax = nice(Math.max(buyCost(xMax), buildCost(xMax, e)));
+    var lo = Math.max(0, Math.floor(Math.log10(Math.min(even, VOLUME_MIN))) - 2);
+    var hi = Math.max(lo + 3, Math.ceil(Math.log10(even) + 0.7));
     return {
-      even: even, xMax: xMax, yMax: yMax,
-      x: function (n) { return M.l + (n / xMax) * PW; },
-      y: function (v) { return M.t + PH - (v / yMax) * PH; }
+      even: even, lo: lo, hi: hi, xMin: Math.pow(10, lo), xMax: Math.pow(10, hi),
+      x: function (n) { return M.l + ((Math.log10(n) - lo) / (hi - lo)) * PW; },
+      n: function (px) { return Math.pow(10, lo + ((px - M.l) / PW) * (hi - lo)); },
+      y: function (v) { return M.t + PH - (Math.min(v, YMAX) / YMAX) * PH; }
     };
   };
 
   var chartMarkup = function (e) {
     var s = scales(e), x = s.x, y = s.y, out = [];
-    var xe = x(s.even), ye = y(buyCost(s.even));
     var f = function (v) { return v.toFixed(1); };
+    var t = function (cls, xx, yy, txt) { out.push('<text class="' + cls + '" x="' + f(xx) + '" y="' + f(yy) + '">' + txt + '</text>'); };
+    var xe = x(s.even), xv = x(VOLUME_MIN), right = M.l + PW;
+    var volHigh = s.even > VOLUME_MIN;       // the crossing is in the volume tier
+    var buyAtEven = (volHigh ? VOLUME_PRICE : PRICE) / 100;
 
-    // Regions: who is cheaper, either side of the crossing.
-    out.push('<rect class="cz cz-buy" x="' + f(M.l) + '" y="' + M.t + '" width="' + f(xe - M.l) + '" height="' + PH + '"/>');
-    if (xe - M.l > 170) out.push('<text class="cz-label cz-label-buy" x="' + f(M.l + 12) + '" y="' + (M.t + 22) + '">RobotStop is cheaper</text>');
-    if (M.l + PW - xe > 170) out.push('<text class="cz-label cz-label-end" x="' + f(M.l + PW - 12) + '" y="' + (M.t + PH - 14) + '">Building it is cheaper</text>');
-
-    // Grid and axes.
-    for (var i = 0; i <= 4; i++) {
-      var v = (s.yMax / 4) * i, yy = y(v);
-      out.push('<line class="grid" x1="' + M.l + '" x2="' + (M.l + PW) + '" y1="' + f(yy) + '" y2="' + f(yy) + '"/>');
-      out.push('<text class="tick tick-y" x="' + (M.l - 10) + '" y="' + f(yy + 4) + '">' + (v === 0 ? '$0' : '$' + k(v)) + '</text>');
+    // Who is cheaper, either side of the crossing.
+    out.push('<rect class="cz cz-buy" x="' + M.l + '" y="' + M.t + '" width="' + f(xe - M.l) + '" height="' + PH + '"/>');
+    if (xe - M.l > 170) t('cz-label cz-label-buy', M.l + 12, M.t + PH - 14, 'RobotStop is cheaper');
+    if (right - xe > 90) {
+      t('cz-label cz-label-end', right - 10, M.t + PH - 30, 'Building');
+      t('cz-label cz-label-end', right - 10, M.t + PH - 14, 'is cheaper');
     }
-    for (var j = 0; j <= 4; j++) {
-      var n = (s.xMax / 4) * j;
-      out.push('<text class="tick tick-x" x="' + f(x(n)) + '" y="' + (M.t + PH + 22) + '">' + k(n) + '</text>');
+
+    // Grid: a line per dollar, a line per decade.
+    for (var d = 0; d <= YMAX; d++) {
+      out.push('<line class="grid" x1="' + M.l + '" x2="' + right + '" y1="' + f(y(d)) + '" y2="' + f(y(d)) + '"/>');
+      t('tick tick-y', M.l - 10, y(d) + 4, '$' + d);
     }
-    out.push('<line class="axis" x1="' + M.l + '" x2="' + (M.l + PW) + '" y1="' + (M.t + PH) + '" y2="' + (M.t + PH) + '"/>');
-    out.push('<text class="axis-title" x="' + (M.l + PW / 2) + '" y="' + (H - 6) + '">Units shipped of one device</text>');
+    for (var p = s.lo; p <= s.hi; p++) {
+      var xp = x(Math.pow(10, p));
+      if (p > s.lo && p < s.hi) out.push('<line class="grid" x1="' + f(xp) + '" x2="' + f(xp) + '" y1="' + M.t + '" y2="' + (M.t + PH) + '"/>');
+      t('tick tick-x', xp, M.t + PH + 22, k(Math.pow(10, p)));
+    }
+    out.push('<line class="axis" x1="' + M.l + '" x2="' + right + '" y1="' + (M.t + PH) + '" y2="' + (M.t + PH) + '"/>');
+    t('axis-title', M.l + PW / 2, H - 6, 'Units shipped of one device (log scale)');
 
-    // Break-even guide.
-    out.push('<line class="even-guide" x1="' + f(xe) + '" x2="' + f(xe) + '" y1="' + M.t + '" y2="' + (M.t + PH) + '"/>');
+    // The hardware floor both options sit on.
+    out.push('<line class="floor" x1="' + M.l + '" x2="' + right + '" y1="' + f(y(1)) + '" y2="' + f(y(1)) + '"/>');
 
-    // The two lines. In-house is dashed, so identity is not color alone.
-    out.push('<line class="ln ln-build" x1="' + M.l + '" y1="' + f(y(buildCost(0, e))) + '" x2="' + (M.l + PW) + '" y2="' + f(y(buildCost(s.xMax, e))) + '"/>');
-    var pts = [[0, 0]];
-    if (s.xMax > VOLUME_MIN) pts.push([VOLUME_MIN, buyCost(VOLUME_MIN)], [VOLUME_MIN, VOLUME_MIN * VOLUME_PRICE / 100]);
-    pts.push([s.xMax, buyCost(s.xMax)]);
-    out.push('<polyline class="ln ln-buy" points="' + pts.map(function (p) { return f(x(p[0])) + ',' + f(y(p[1])); }).join(' ') + '"/>');
+    // Building: engineering spread over every unit, plus the hardware dollar.
+    // Starts where it comes down through the top of the chart.
+    var n0 = e > 0 ? Math.max(s.xMin, e / (YMAX - HARDWARE / 100)) : s.xMin, pts = [];
+    for (var i = 0; i <= 160; i++) {
+      var n = Math.pow(10, Math.log10(n0) + (i / 160) * (s.hi - Math.log10(n0)));
+      pts.push(f(x(n)) + ',' + f(y(buildCost(n, e) / n)));
+    }
+    out.push('<polyline class="ln ln-build" points="' + pts.join(' ') + '"/>');
+    if (n0 > s.xMin * 1.5) {
+      var x0 = x(n0);
+      t('note note-build', x0 + 8, M.t + 14, 'Building: ' + cents(buildCost(s.xMin, e) / s.xMin) + ' a unit at ' + k(s.xMin) + (s.xMin === 1 ? ' unit' : ' units'));
+    }
 
-    // Direct labels at the line ends.
-    var yb = y(buyCost(s.xMax)), yh = y(buildCost(s.xMax, e));
-    if (Math.abs(yb - yh) < 38) { var mid = (yb + yh) / 2; yb = mid - 19; yh = mid + 19; }
-    var lx = M.l + PW + 10;
-    out.push('<text class="end-label" x="' + lx + '" y="' + f(yb - 2) + '">Buy</text>');
-    out.push('<text class="end-value" x="' + lx + '" y="' + f(yb + 14) + '">' + usd(buyCost(s.xMax)) + '</text>');
-    out.push('<text class="end-label" x="' + lx + '" y="' + f(yh - 2) + '">Build</text>');
-    out.push('<text class="end-value" x="' + lx + '" y="' + f(yh + 14) + '">' + usd(buildCost(s.xMax, e)) + '</text>');
+    // Buying: $2, then the volume price from 10,000 on. A step, drawn square.
+    var bp = [[s.xMin, PRICE / 100]];
+    if (VOLUME_MIN < s.xMax) bp.push([VOLUME_MIN, PRICE / 100], [VOLUME_MIN, VOLUME_PRICE / 100]);
+    bp.push([s.xMax, (VOLUME_MIN < s.xMax ? VOLUME_PRICE : PRICE) / 100]);
+    out.push('<polyline class="ln ln-buy" points="' + bp.map(function (q) { return f(x(q[0])) + ',' + f(y(q[1])); }).join(' ') + '"/>');
+    t('buy-label', M.l + 10, y(PRICE / 100) - 10, '$2 a unit');
+    if (VOLUME_MIN < s.xMax) {
+      t('buy-label', xv + 10, y(VOLUME_PRICE / 100) - 12, '$1.10 a unit');
+      t('step-label', xv - 8, y((PRICE + VOLUME_PRICE) / 200) + 4, 'Over 10,000 units:');
+      t('step-value', xv - 8, y((PRICE + VOLUME_PRICE) / 200) + 20, 'volume price');
+      out.push('<line class="step-tick" x1="' + f(xv - 4) + '" x2="' + f(xv - 4) + '" y1="' + f(y(PRICE / 100) + 6) + '" y2="' + f(y(VOLUME_PRICE / 100) - 6) + '"/>');
+    }
+
+    // End labels.
+    var yb = y(buyCost(s.xMax) / s.xMax), yh = y(buildCost(s.xMax, e) / s.xMax);
+    if (Math.abs(yb - yh) < 36) { var mid = (yb + yh) / 2, up = yb <= yh; yb = mid + (up ? -18 : 18); yh = mid + (up ? 18 : -18); }
+    t('end-label', right + 10, yb - 2, 'Buy');
+    t('end-value', right + 10, yb + 14, cents(buyCost(s.xMax) / s.xMax) + ' a unit');
+    t('end-label', right + 10, yh - 2, 'Build');
+    t('end-value', right + 10, yh + 14, cents(buildCost(s.xMax, e) / s.xMax) + ' a unit');
 
     // The crossing.
+    var ye = y(buyAtEven);
+    out.push('<line class="even-guide" x1="' + f(xe) + '" x2="' + f(xe) + '" y1="' + M.t + '" y2="' + (M.t + PH) + '"/>');
     out.push('<circle class="even-dot" cx="' + f(xe) + '" cy="' + f(ye) + '" r="5"/>');
-    out.push('<text class="even-label" x="' + f(xe + 10) + '" y="' + f(ye + 24) + '">Break-even</text>');
-    out.push('<text class="even-value" x="' + f(xe + 10) + '" y="' + f(ye + 40) + '">~' + (s.even < 2000 ? s.even : Math.round(s.even / 1000) * 1000).toLocaleString('en-US') + ' units</text>');
+    t('even-label', xe + 10, ye - 42, 'Break-even');
+    t('even-value', xe + 10, ye - 26, '~' + round(s.even).toLocaleString('en-US') + ' units');
 
     // Crosshair, moved by the hover layer.
     out.push('<g class="xhair" id="chart-xhair" style="display:none"><line class="xhair-line" y1="' + M.t + '" y2="' + (M.t + PH) + '"/>' +
@@ -119,7 +144,7 @@
 
   // --- chart -----------------------------------------------------------------
 
-  var svg = $('chart-svg'), tip = $('chart-tip'), plot = $('chart-plot');
+  var svg = $('chart-svg'), tip = $('chart-tip');
   var chartNre = 50000, hoverN = null;
 
   var drawChart = function (e) {
@@ -133,8 +158,7 @@
     var hit = $('chart-hit');
     hit.addEventListener('pointermove', function (ev) {
       var r = svg.getBoundingClientRect();
-      var px = (ev.clientX - r.left) * (W / r.width);
-      show(((px - M.l) / PW) * scales(chartNre).xMax);
+      show(scales(chartNre).n((ev.clientX - r.left) * (W / r.width)));
     });
     hit.addEventListener('pointerleave', hide);
     if (hoverN !== null) show(hoverN);
@@ -149,32 +173,37 @@
     return d;
   };
 
+  // Two significant figures, so the readout lands on numbers people say.
+  var snap = function (n) {
+    var p = Math.pow(10, Math.floor(Math.log10(n)) - 1);
+    return Math.round(n / p) * p;
+  };
+
   var show = function (n) {
     var s = scales(chartNre);
-    var step = s.xMax / 100;
-    n = Math.min(s.xMax, Math.max(step, Math.round(n / step) * step));
+    n = Math.min(s.xMax, Math.max(s.xMin, snap(n)));
     hoverN = n;
     var buy = buyCost(n), build = buildCost(n, chartNre);
     var g = $('chart-xhair'); g.style.display = '';
     var xx = s.x(n);
     var l = g.querySelector('.xhair-line'); l.setAttribute('x1', xx); l.setAttribute('x2', xx);
-    var cb = g.querySelector('.xhair-buy'); cb.setAttribute('cx', xx); cb.setAttribute('cy', s.y(buy));
-    var ch = g.querySelector('.xhair-build'); ch.setAttribute('cx', xx); ch.setAttribute('cy', s.y(build));
+    var cb = g.querySelector('.xhair-buy'); cb.setAttribute('cx', xx); cb.setAttribute('cy', s.y(buy / n));
+    var ch = g.querySelector('.xhair-build'); ch.setAttribute('cx', xx); ch.setAttribute('cy', s.y(build / n));
 
     tip.textContent = '';
     var h = document.createElement('p'); h.className = 'bvb-tip-head';
     h.textContent = n.toLocaleString('en-US') + ' units';
     tip.appendChild(h);
-    tip.appendChild(row('bvb-tip-buy', usd(buy), 'buy'));
-    tip.appendChild(row('bvb-tip-build', usd(build), 'build'));
+    tip.appendChild(row('bvb-tip-buy', cents(buy / n) + ' a unit', 'buy, ' + usd(buy) + ' total'));
+    tip.appendChild(row('bvb-tip-build', cents(build / n) + ' a unit', 'build, ' + usd(build) + ' total'));
     var v = document.createElement('p'); v.className = 'bvb-tip-verdict';
     v.textContent = buy < build ? 'Buying saves ' + usd(build - buy)
       : buy > build ? 'Building saves ' + usd(buy - build) : 'Even';
     tip.appendChild(v);
     tip.hidden = false;
-    var frac = (xx / W);
+    var frac = xx / W;
     tip.style.left = (frac * 100) + '%';
-    tip.classList.toggle('is-left', frac > 0.6);
+    tip.classList.toggle('is-left', frac > 0.55);
   };
 
   var hide = function () {
@@ -185,10 +214,9 @@
 
   if (svg) {
     svg.addEventListener('keydown', function (ev) {
-      var s = scales(chartNre), step = s.xMax / 20;
-      var cur = hoverN === null ? s.even : hoverN;
-      if (ev.key === 'ArrowRight') { show(cur + step); ev.preventDefault(); }
-      else if (ev.key === 'ArrowLeft') { show(cur - step); ev.preventDefault(); }
+      var s = scales(chartNre), cur = hoverN === null ? s.even : hoverN;
+      if (ev.key === 'ArrowRight') { show(cur * 1.26); ev.preventDefault(); }
+      else if (ev.key === 'ArrowLeft') { show(cur / 1.26); ev.preventDefault(); }
       else if (ev.key === 'Escape') hide();
     });
     svg.addEventListener('focus', function () { if (hoverN === null) show(scales(chartNre).even); });
