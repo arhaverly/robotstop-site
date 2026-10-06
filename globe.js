@@ -1,57 +1,55 @@
-/* Spinnable language globe.
- *
- * Canvas 2D, orthographic projection, no dependencies. The language list is not
- * in this file — it is read from the chip buttons in the markup, so the page
- * still lists every language with JavaScript off and there is only one copy of
- * the data. Land outlines come from globe-land.js (Natural Earth 110m).
+/* Worldwide language globe. All catalog entries are navigable; only recorded
+ * coordinates are plotted. Marker vectors are precomputed and drawn in batches.
+ * Land outlines come from globe-land.js (Natural Earth 110m).
  */
 (function () {
   'use strict';
+  var I18N = window.RobotStopI18n;
+  var t = I18N ? I18N.t : function (s) { return s; };
+  function format(template, values) {
+    return t(template).replace(/\{(\w+)\}/g, function (_, key) { return values[key]; });
+  }
 
   var wrap = document.getElementById('globe');
   var canvas = document.getElementById('globe-canvas');
   if (!wrap || !canvas || !canvas.getContext) return;
 
-  var chips = Array.prototype.slice.call(document.querySelectorAll('#globe-chips .chip'));
-  if (!chips.length) return;
-
+  var catalog = window.ROBOTSTOP_CATALOG;
+  if (!catalog || !catalog.records.length) return;
   var ctx = canvas.getContext('2d');
+  if (!ctx) return;
   var LAND = window.ROBOTSTOP_LAND || [];
   var DOTS = window.ROBOTSTOP_DOTS || [];
   var TAU = Math.PI * 2;
   var DEG = Math.PI / 180;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var I18N = window.RobotStopI18n;
-  var t = I18N ? I18N.t : function (s) { return s; };
-  // The page's mono stack, which carries a CJK fallback on Chinese pages.
-  var labelFont;
-  function readFont() {
-    labelFont = getComputedStyle(document.documentElement).getPropertyValue('--mono').trim() ||
-      'ui-monospace, SFMono-Regular, Menlo, monospace';
-  }
-  readFont();
-
-  var LANGS = chips.map(function (el) {
-    var d = el.getAttribute.bind(el);
-    return {
-      el: el,
-      country: d('data-country'),
-      language: d('data-language'),
-      word: d('data-word'),
-      roman: d('data-roman') || '',
-      tier: d('data-tier'),
-      tag: d('data-tag'),
-      lat: parseFloat(d('data-lat')),
-      lon: parseFloat(d('data-lon'))
-    };
+  var LANGS = catalog.records;
+  var byId = new Map();
+  var mapped = [];
+  var points = new Map();
+  LANGS.forEach(function (record, i) {
+    byId.set(record.id, i);
+    if (!hasLocation(record)) return;
+    var lat = record.lat * DEG, lon = record.lon * DEG;
+    var point = { index: i, x: Math.cos(lat) * Math.sin(lon),
+      y: Math.sin(lat), z: Math.cos(lat) * Math.cos(lon) };
+    mapped.push(point);
+    points.set(i, point);
   });
+  function hasLocation(record) {
+    return Number.isFinite(record.lat) && Number.isFinite(record.lon) &&
+      Math.abs(record.lat) <= 90 && Math.abs(record.lon) <= 180;
+  }
+  function count(number) { return number.toLocaleString('en-US'); }
+  var mappedPosition = new Map(mapped.map(function (p, i) { return [p.index, i]; }));
 
   var out = {
     tier: document.getElementById('globe-tier'),
     country: document.getElementById('globe-country'),
     word: document.getElementById('globe-word'),
     language: document.getElementById('globe-language'),
-    roman: document.getElementById('globe-roman')
+    position: document.getElementById('globe-position'),
+    source: document.getElementById('globe-source')
   };
   var prevBtn = document.getElementById('globe-prev');
   var nextBtn = document.getElementById('globe-next');
@@ -60,21 +58,17 @@
 
   /* ---------- state ---------- */
 
-  // Open on the visitor's own language: United States ("stop") by default.
-  var UI_TAG = { es: 'es', 'zh-Hans': 'zh', 'zh-Hant': 'zh' };
-  function startFor(code) {
-    var tag = UI_TAG[code] || 'en';
-    for (var i = 0; i < LANGS.length; i++) if (LANGS[i].tag === tag) return i;
-    return 1;
-  }
-  var START = startFor(I18N ? I18N.lang() : 'en');
+  var uiLanguage = document.documentElement.lang;
+  var startISO = uiLanguage === 'es' ? 'spa' : /^zh/.test(uiLanguage) ? 'cmn' : 'eng';
+  var START = LANGS.findIndex(function (record) { return record.iso === startISO; });
+  if (START < 0) START = 0;
   var sel = START;
-  var rot = -LANGS[START].lon;                    // degrees; view centre is lon -rot
-  var tilt = LANGS[START].lat;                    // degrees; view centre is lat tilt
+  var rot = hasLocation(LANGS[START]) ? -LANGS[START].lon : 0;                    // degrees; view centre is lon -rot
+  var tilt = hasLocation(LANGS[START]) ? LANGS[START].lat : 0;                    // degrees; view centre is lat tilt
   var vel = 0;
   var dragging = false, moved = 0, lastX = 0, lastY = 0;
   var anim = null;
-  var tour = !reduced;
+  var tour = !reduced && mapped.length > 0;
   var dwellFrom = 0;
   var raf = null, onScreen = true;
   var W = 0, H = 0, R = 0, cx = 0, cy = 0;
@@ -166,36 +160,43 @@
     }
   }
 
+  function markerProjection(point, cr, sr, ct, st) {
+    var x = point.x * cr + point.z * sr;
+    var z = point.z * cr - point.x * sr;
+    return { x: cx + R * x, y: cy - R * (point.y * ct - z * st),
+      z: point.y * st + z * ct };
+  }
+
   function markers() {
-    var here = null;
-    for (var i = 0; i < LANGS.length; i++) {
-      var L = LANGS[i], p = project(L.lon, L.lat);
-      if (p.z <= 0.02) continue;
-      var on = i === sel;
-      ctx.globalAlpha = Math.min(1, p.z * 2.4);
-      if (on) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 13, 0, TAU);
-        ctx.strokeStyle = 'rgba(240,67,56,.5)';
-        ctx.lineWidth = 1.2;
-        ctx.stroke();
-        here = { p: p, L: L };
-      }
+    var cr = Math.cos(rot * DEG), sr = Math.sin(rot * DEG);
+    var ct = Math.cos(tilt * DEG), st = Math.sin(tilt * DEG);
+    // Two batched paths avoid thousands of individual canvas fill operations.
+    ['language', 'dialect'].forEach(function (level) {
+      var radius = level === 'language' ? 1.6 : 2.2;
+      ctx.fillStyle = level === 'language' ? 'rgba(255,101,85,.72)' : 'rgba(105,208,238,.9)';
       ctx.beginPath();
-      ctx.arc(p.x, p.y, on ? 4.4 : 2.6, 0, TAU);
-      ctx.fillStyle = on ? '#f04338' : 'rgba(240,67,56,.6)';
+      mapped.forEach(function (point) {
+        if (LANGS[point.index].level !== level) return;
+        var p = markerProjection(point, cr, sr, ct, st);
+        if (p.z <= 0.02) return;
+        ctx.moveTo(p.x + radius, p.y);
+        ctx.arc(p.x, p.y, radius, 0, TAU);
+      });
       ctx.fill();
-      ctx.globalAlpha = 1;
-    }
-    if (here) {
-      ctx.font = '600 10px ' + labelFont;
-      ctx.textBaseline = 'middle';
-      var label = t(here.L.country).toUpperCase();
-      var right = here.p.x + 20 + ctx.measureText(label).width < W;
-      ctx.textAlign = right ? 'left' : 'right';
-      ctx.fillStyle = 'rgba(255,255,255,.92)';
-      ctx.fillText(label, here.p.x + (right ? 20 : -20), here.p.y);
-    }
+    });
+    var selected = points.get(sel);
+    if (!selected) return;
+    var p = markerProjection(selected, cr, sr, ct, st);
+    if (p.z <= 0.02) return;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 9, 0, TAU);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 3.5, 0, TAU);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
   }
 
   function reticle() {
@@ -253,9 +254,10 @@
 
   function nearest() {
     var best = sel, bd = Infinity;
-    for (var i = 0; i < LANGS.length; i++) {
-      var d = angularDistance(LANGS[i].lon, LANGS[i].lat);
-      if (d < bd) { bd = d; best = i; }
+    for (var i = 0; i < mapped.length; i++) {
+      var index = mapped[i].index;
+      var d = angularDistance(LANGS[index].lon, LANGS[index].lat);
+      if (d < bd) { bd = d; best = index; }
     }
     return best;
   }
@@ -268,28 +270,38 @@
 
   function paint() {
     var L = LANGS[sel];
-    out.tier.textContent = t(L.tier === 'A' ? 'Tier A · qualified' : 'Tier B · beta');
-    out.tier.className = 'globe-tier' + (L.tier === 'B' ? ' is-beta' : '');
-    out.country.textContent = t(L.country);
-    out.word.textContent = L.word;
-    out.word.setAttribute('lang', L.tag);
-    out.word.setAttribute('dir', L.tag === 'ar' ? 'rtl' : 'ltr');
-    out.language.textContent = t(L.language);
-    out.roman.textContent = L.roman ? '“' + L.roman + '”' : '';
-    for (var i = 0; i < LANGS.length; i++) {
-      LANGS[i].el.setAttribute('aria-pressed', i === sel ? 'true' : 'false');
-    }
+    out.tier.textContent = t(L.level) + ' · ' + t('Reference catalog');
+    out.country.textContent = hasLocation(L) ?
+      format('Representative location · {lat}°, {lon}°', { lat: L.lat.toFixed(2), lon: L.lon.toFixed(2) }) :
+      t('Location unknown · no marker plotted');
+    out.word.textContent = L.name;
+    out.language.textContent = L.id + (L.iso ? ' · ISO ' + L.iso : '') +
+      (L.parent ? ' · ' + L.parent : '');
+    out.position.textContent = format('Entry {position} of {total}', { position: count(sel + 1), total: count(LANGS.length) });
+    out.source.href = 'https://glottolog.org/resource/languoid/id/' + L.id;
+    out.source.textContent = format('View {name} in Glottolog', { name: L.name });
+    canvas.setAttribute('aria-label', format('World language and dialect globe. Selected: {name}. {location} Drag to spin, click a marker, or use arrow keys to browse all {total} entries.', {
+      name: L.name, location: hasLocation(L) ? t('Representative location highlighted.') : t('Location unknown; no marker plotted.'), total: count(LANGS.length)
+    }));
   }
 
   /* ---------- motion ---------- */
 
   function goTo(i, dur) {
     var L = LANGS[i];
+    vel = 0;
+    if (!hasLocation(L)) {
+      anim = null;
+      show(i);
+      dwellFrom = performance.now();
+      kick();
+      return;
+    }
     var targetRot = -L.lon;
     var d = ((targetRot - rot + 540) % 360) - 180;
     anim = {
       r0: rot, dr: d,
-      t0: tilt, dt: clamp(L.lat, -58, 58) - tilt,
+      t0: tilt, dt: L.lat - tilt,
       start: null, dur: reduced ? 0 : (dur || 900)
     };
     show(i);
@@ -306,10 +318,11 @@
     if (!tour) return;
     tour = false;
     tourBtn.setAttribute('aria-pressed', 'false');
-    tourBtn.textContent = t('Resume tour');
+    tourBtn.textContent = t('Tour mapped entries');
   }
 
   function startTour() {
+    if (!mapped.length) return;
     tour = true;
     tourBtn.setAttribute('aria-pressed', 'true');
     tourBtn.textContent = t('Pause tour');
@@ -334,7 +347,10 @@
       if (Math.abs(vel) <= 0.03) settle();
     } else if (tour && !dragging) {
       if (!dwellFrom) dwellFrom = now;
-      if (now - dwellFrom > 2000) goTo((sel + 1) % LANGS.length, 1200);
+      if (now - dwellFrom > 2000) {
+        var current = mappedPosition.has(sel) ? mappedPosition.get(sel) : -1;
+        goTo(mapped[(current + 1) % mapped.length].index, 1200);
+      }
     }
 
     draw();
@@ -342,7 +358,7 @@
   }
 
   function kick() {
-    if (raf === null && onScreen) raf = requestAnimationFrame(frame);
+    if (raf === null && onScreen && !document.hidden) raf = requestAnimationFrame(frame);
   }
 
   /* ---------- input ---------- */
@@ -372,7 +388,7 @@
     moved += Math.abs(dx) + Math.abs(dy);
     if (moved > 8) e.preventDefault();
     rot += dx * 0.32;
-    tilt = clamp(tilt + dy * 0.26, -68, 68);
+    tilt = clamp(tilt + dy * 0.26, -90, 90);
     vel = dx * 0.32;
     show(nearest());
     kick();
@@ -385,11 +401,12 @@
       var rect = canvas.getBoundingClientRect();
       var px = e.clientX - rect.left, py = e.clientY - rect.top;
       var hit = -1, hd = 26;
-      for (var i = 0; i < LANGS.length; i++) {
-        var p = project(LANGS[i].lon, LANGS[i].lat);
+      for (var i = 0; i < mapped.length; i++) {
+        var index = mapped[i].index;
+        var p = project(LANGS[index].lon, LANGS[index].lat);
         if (p.z <= 0.02) continue;
         var d = Math.sqrt((p.x - px) * (p.x - px) + (p.y - py) * (p.y - py));
-        if (d < hd) { hd = d; hit = i; }
+        if (d < hd) { hd = d; hit = index; }
       }
       if (hit >= 0) { goTo(hit, 600); return; }
     }
@@ -418,11 +435,23 @@
     if (tour) stopTour(); else startTour();
   });
 
-  chips.forEach(function (el, i) {
-    el.addEventListener('click', function () {
-      stopTour(); dismissHint(); goTo(i, 700);
-    });
+  document.addEventListener('robotstop:locate', function (event) {
+    var record = event.detail;
+    if (!record || !byId.has(record.id)) return;
+    stopTour();
+    dismissHint();
+    goTo(byId.get(record.id), 700);
   });
+
+  function coverage() {
+    document.getElementById('globe-coverage').textContent = format('{total} entries · {mapped} with recorded locations · {unknown} without coordinates', {
+      total: count(LANGS.length), mapped: count(mapped.length), unknown: count(LANGS.length - mapped.length)
+    });
+  }
+  coverage();
+  prevBtn.disabled = false;
+  nextBtn.disabled = false;
+  tourBtn.disabled = mapped.length === 0;
 
   /* ---------- lifecycle ---------- */
 
@@ -442,23 +471,18 @@
 
   document.addEventListener('visibilitychange', function () {
     if (!document.hidden) kick();
+    else if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
   });
 
   if (reduced && tourBtn) {
     tourBtn.setAttribute('aria-pressed', 'false');
-    tourBtn.textContent = t('Resume tour');
+    tourBtn.textContent = t('Tour mapped entries');
   }
 
-  if (I18N) {
-    I18N.onChange(function (code) {
-      readFont();
-      tourBtn.textContent = t(tour ? 'Pause tour' : 'Resume tour');
-      paint();
-      var i = startFor(code);
-      if (i !== sel) { stopTour(); goTo(i, 900); } else kick();
-    });
-  }
-
+  if (I18N) I18N.onChange(function () {
+    paint(); coverage();
+    tourBtn.textContent = t(tour ? 'Pause tour' : 'Tour mapped entries');
+  });
   paint();
   resize();
   kick();

@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RobotStop — the voice stop for robots you already own</title>
-<meta name="description" content="RobotStop is a voice-activated stop-request module that bolts onto a robot you already own. On-device detection, no cloud, no network. First unit free, then $2 each.">
+<meta name="description" content="RobotStop is a voice-activated stop-request module that bolts onto a robot you already own. Expanding toward every spoken language and dialect on Earth. Explore the worldwide language catalog. First unit free, then $2 each.">
 <meta name="theme-color" content="#0a0c0d">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta property="og:title" content="RobotStop — say stop, it stops">
-<meta property="og:description" content="A voice-activated stop-request module for the robot you already own. Two independent channels, on-device, no cloud.">
+<meta property="og:description" content="A voice-activated stop-request module for the robot you already own. Our goal: every spoken language and dialect on Earth. Explore the worldwide language catalog and qualification approach.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,9 +55,9 @@
     <h1 class="hero-title">Say &ldquo;stop.&rdquo;<br><span class="hero-title-accent">It stops.</span></h1>
     <p class="hero-sub">
       RobotStop is safety hardware for physical AI. It bolts onto a robot you already own
-      and listens for one word in eighteen languages.
+      with one goal: a stop request in every spoken language and dialect on Earth.
       Two independent channels, all detection on the device, no wake word, no cloud,
-      no network. When anyone in the room says stop, power drops.
+      no network. Language coverage is expanding; each variety must be validated before it is listed as supported.
     </p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="#offerings">First unit free &mdash; then $2</a>
@@ -71,7 +71,7 @@
     <dl class="ticker">
       <div class="ticker-item"><dt>Stop latency</dt><dd>&le;&thinsp;300 ms<span class="unit">99th percentile</span></dd></div>
       <div class="ticker-item"><dt>Detection channels</dt><dd>2<span class="unit">independent, cross-monitored</span></dd></div>
-      <div class="ticker-item"><dt>Languages</dt><dd>18<span class="unit">10 qualified, 8 in beta</span></dd></div>
+      <div class="ticker-item"><dt>Language ambition</dt><dd>All<span class="unit">spoken languages + dialects</span></dd></div>
       <div class="ticker-item"><dt>Cloud services</dt><dd>0<span class="unit">all detection on-device</span></dd></div>
     </dl>
   </div>
@@ -227,71 +227,109 @@
 <section class="section section-globe" id="languages">
   <div class="shell">
     <p class="eyebrow eyebrow-num"><span>04</span> Languages</p>
-    <h2 class="h2">It stops in the language the room is shouting in.</h2>
+    <h2 class="h2">Every language. Every dialect.<br>A stop request in every voice.</h2>
     <p class="lede">
-      Ten languages are qualified individually &mdash; not one English model with translations
-      bolted on top. Each keyword list is validated with native speakers, then measured from
-      scratch against the same protocol: twenty or more speakers per language, balanced by age
-      and sex, a quarter of them non-native, every one of them recording the word calm, raised
-      and shouted &mdash; a fifth of it through a dust mask. Eight more languages are in beta and
-      labeled as such.
+      We are expanding our ambition to every spoken language and dialect on Earth,
+      including regional varieties and communities with little recorded speech.
+      Local words, accents and pronunciations all belong in that work.
+      Each variety needs its own recordings, evaluation and published evidence.
     </p>
+    <dl class="globe-stats language-counts">
+      <div><dt>Language entries</dt><dd>8,238<span class="unit">Glottolog 5.3 catalog</span></dd></div>
+      <div><dt>Dialect entries</dt><dd>13,706<span class="unit">documented in the same catalog</span></dd></div>
+      <div><dt>Combined entries</dt><dd>21,944<span class="unit">families and bookkeeping excluded</span></dd></div>
+      <div><dt>Our ambition</dt><dd>All<span class="unit">spoken languages and dialects</span></dd></div>
+    </dl>
+    <div class="language-notes">
+      <h3>How many is &ldquo;all&rdquo;?</h3>
+      <p>There is no definitive worldwide total for languages plus dialects.
+        <a href="https://glottolog.org/glottolog/glottologinformation">Glottolog 5.3</a>
+        identifies 7,674 spoken first-language languages; its broader catalog also includes
+        signed, historical and other categories. Our 21,944-entry reference inventory counts
+        language and dialect records together. It is neither a census of living spoken varieties
+        nor a count of languages RobotStop currently detects. Dialect documentation is incomplete
+        and classifications change.</p>
+      <p><strong>Coverage today:</strong> the development word lists cover English, Mandarin Chinese
+        and Korean. Word lists alone do not establish qualification. The worldwide scope is an
+        expansion program; support must be established for the model and variety you deploy.</p>
+      <p>Signed languages are part of the world&rsquo;s linguistic diversity and appear in the
+        catalog. A microphone cannot recognize signing; signed-language support would require a
+        separate sensing approach.</p>
+    </div>
 
     <div class="globe-wrap" id="globe">
       <div class="globe-stage">
-        <canvas id="globe-canvas" tabindex="0" role="img"
-                aria-label="A globe of the languages RobotStop is qualified in. Drag to spin it; the word for stop appears for the country under the crosshair. Left and right arrow keys step through the languages."></canvas>
-        <p class="globe-hint"><span>Drag to spin</span></p>
+        <canvas id="globe-canvas" data-i18n-dynamic tabindex="0" role="img"
+                aria-label="World language and dialect globe. Recorded locations appear as markers. Use the catalog below to browse all entries."></canvas>
+        <p class="globe-hint"><span>Drag to spin &middot; tap a point</span></p>
       </div>
 
       <div class="globe-panel">
-        <div class="globe-read" aria-live="polite">
-          <p class="globe-tier" id="globe-tier" data-i18n-dynamic>Tier A &middot; qualified</p>
-          <p class="globe-country" id="globe-country" data-i18n-dynamic>United States</p>
-          <p class="globe-word" id="globe-word" data-i18n-dynamic lang="en">stop</p>
-          <p class="globe-meta"><span id="globe-language" data-i18n-dynamic>English</span><span class="globe-roman" id="globe-roman" data-i18n-dynamic></span></p>
-        </div>
-
-        <div class="globe-controls">
-          <button type="button" class="globe-btn" id="globe-prev" aria-label="Previous language">&#8592;</button>
-          <button type="button" class="globe-btn" id="globe-next" aria-label="Next language">&#8594;</button>
-          <button type="button" class="globe-btn globe-btn-wide" id="globe-tour" data-i18n-dynamic aria-pressed="true">Pause tour</button>
-        </div>
-
-        <p class="globe-chips-label">All eighteen, tap to jump</p>
-        <ul class="globe-chips" id="globe-chips">
-          <li><button type="button" class="chip" data-i="0" data-country="Mexico" data-language="Spanish" data-word="alto" data-roman="" data-tier="A" data-tag="es" data-lat="19.4" data-lon="-99.1">Spanish</button></li>
-          <li><button type="button" class="chip" data-i="1" data-country="United States" data-language="English" data-word="stop" data-roman="" data-tier="A" data-tag="en" data-lat="38.9" data-lon="-77.0">English</button></li>
-          <li><button type="button" class="chip" data-i="2" data-country="Brazil" data-language="Portuguese" data-word="pare" data-roman="" data-tier="A" data-tag="pt" data-lat="-15.8" data-lon="-47.9">Portuguese</button></li>
-          <li><button type="button" class="chip" data-i="3" data-country="France" data-language="French" data-word="arrête" data-roman="" data-tier="A" data-tag="fr" data-lat="48.9" data-lon="2.4">French</button></li>
-          <li><button type="button" class="chip" data-i="4" data-country="Netherlands" data-language="Dutch" data-word="stop" data-roman="" data-tier="B" data-tag="nl" data-lat="52.4" data-lon="4.9">Dutch</button></li>
-          <li><button type="button" class="chip" data-i="5" data-country="Italy" data-language="Italian" data-word="fermo" data-roman="" data-tier="A" data-tag="it" data-lat="41.9" data-lon="12.5">Italian</button></li>
-          <li><button type="button" class="chip" data-i="6" data-country="Germany" data-language="German" data-word="Stopp" data-roman="" data-tier="A" data-tag="de" data-lat="52.5" data-lon="13.4">German</button></li>
-          <li><button type="button" class="chip" data-i="7" data-country="Poland" data-language="Polish" data-word="stój" data-roman="" data-tier="B" data-tag="pl" data-lat="52.2" data-lon="21.0">Polish</button></li>
-          <li><button type="button" class="chip" data-i="8" data-country="Türkiye" data-language="Turkish" data-word="dur" data-roman="" data-tier="B" data-tag="tr" data-lat="39.9" data-lon="32.9">Turkish</button></li>
-          <li><button type="button" class="chip" data-i="9" data-country="Russia" data-language="Russian" data-word="стой" data-roman="stoy" data-tier="B" data-tag="ru" data-lat="55.8" data-lon="37.6">Russian</button></li>
-          <li><button type="button" class="chip" data-i="10" data-country="Saudi Arabia" data-language="Arabic" data-word="توقف" data-roman="tawaqqaf" data-tier="B" data-tag="ar" data-lat="24.7" data-lon="46.7">Arabic</button></li>
-          <li><button type="button" class="chip" data-i="11" data-country="India" data-language="Hindi" data-word="रुको" data-roman="ruko" data-tier="A" data-tag="hi" data-lat="28.6" data-lon="77.2">Hindi</button></li>
-          <li><button type="button" class="chip" data-i="12" data-country="Thailand" data-language="Thai" data-word="หยุด" data-roman="yut" data-tier="B" data-tag="th" data-lat="13.8" data-lon="100.5">Thai</button></li>
-          <li><button type="button" class="chip" data-i="13" data-country="Vietnam" data-language="Vietnamese" data-word="dừng lại" data-roman="" data-tier="B" data-tag="vi" data-lat="21.0" data-lon="105.8">Vietnamese</button></li>
-          <li><button type="button" class="chip" data-i="14" data-country="Indonesia" data-language="Indonesian" data-word="berhenti" data-roman="" data-tier="B" data-tag="id" data-lat="-6.2" data-lon="106.8">Indonesian</button></li>
-          <li><button type="button" class="chip" data-i="15" data-country="China" data-language="Mandarin" data-word="停" data-roman="tíng" data-tier="A" data-tag="zh" data-lat="39.9" data-lon="116.4">Mandarin</button></li>
-          <li><button type="button" class="chip" data-i="16" data-country="South Korea" data-language="Korean" data-word="멈추" data-roman="meomchwo" data-tier="A" data-tag="ko" data-lat="37.6" data-lon="127.0">Korean</button></li>
-          <li><button type="button" class="chip" data-i="17" data-country="Japan" data-language="Japanese" data-word="止まれ" data-roman="tomare" data-tier="A" data-tag="ja" data-lat="35.7" data-lon="139.7">Japanese</button></li>
+        <p class="globe-chips-label">The full worldwide catalog</p>
+        <p class="globe-coverage" id="globe-coverage" data-i18n-dynamic>21,944 entries &middot; 8,655 with recorded locations &middot; 13,289 without coordinates</p>
+        <ul class="globe-legend" aria-label="Map legend">
+          <li><span class="legend-language" aria-hidden="true"></span>Languages</li>
+          <li><span class="legend-dialect" aria-hidden="true"></span>Dialects</li>
+          <li><span class="legend-selected" aria-hidden="true"></span>Selected</li>
         </ul>
+        <div class="globe-read" aria-live="polite" aria-atomic="true">
+          <p class="globe-tier" id="globe-tier" data-i18n-dynamic>Reference catalog</p>
+          <p class="globe-country" id="globe-country" data-i18n-dynamic>Explore a language or dialect</p>
+          <p class="globe-word is-catalog-name" id="globe-word" data-i18n-dynamic>Every voice</p>
+          <p class="globe-meta" id="globe-language" data-i18n-dynamic>Enable JavaScript to explore the globe, or download the catalog below.</p>
+          <p class="globe-position" id="globe-position" data-i18n-dynamic></p>
+        </div>
+        <p class="globe-source"><a id="globe-source" data-i18n-dynamic href="https://glottolog.org/">View the source catalog</a></p>
+        <div class="globe-controls">
+          <button type="button" class="globe-btn" id="globe-prev" aria-label="Previous catalog entry" disabled>&#8592;</button>
+          <button type="button" class="globe-btn" id="globe-next" aria-label="Next catalog entry" disabled>&#8594;</button>
+          <button type="button" class="globe-btn globe-btn-wide" id="globe-tour" data-i18n-dynamic aria-pressed="true" disabled>Pause tour</button>
+        </div>
+        <p class="globe-note">Arrows browse every entry. The tour visits mapped locations.
+          Entries without coordinates can still be selected; their location is shown as unknown.
+          Markers show representative locations and may overlap.</p>
+        <a class="globe-search-link" href="#language-catalog">Search all languages and dialects &darr;</a>
       </div>
     </div>
 
-    <dl class="globe-stats">
-      <div><dt>Tier A languages</dt><dd>10<span class="unit">release-blocking</span></dd></div>
-      <div><dt>Speakers per language</dt><dd>&ge;&thinsp;20<span class="unit">balanced, 25% non-native</span></dd></div>
-      <div><dt>Utterances per condition</dt><dd>&ge;&thinsp;1,000<span class="unit">per language</span></dd></div>
-      <div><dt>Site noise recorded</dt><dd>&ge;&thinsp;50 h<span class="unit">from 5 or more real sites</span></dd></div>
-    </dl>
+    <div class="language-catalog" id="language-catalog">
+      <h3>Explore the worldwide catalog</h3>
+      <p>Search by name, parent variety, ISO 639-3 code or Glottocode. These are reference
+        entries, not a list of supported models. A location is a representative point,
+        not a language boundary. Varieties without coordinates remain searchable.</p>
+      <div class="catalog-filters" id="catalog-filters" hidden>
+        <div><label for="language-search">Find a language or dialect</label>
+          <input type="search" id="language-search" placeholder="Try English, Cantonese or eng" aria-controls="catalog-results" autocomplete="off"></div>
+        <div><label for="language-level">Entry type</label>
+          <select id="language-level"><option value="all">Languages + dialects</option><option value="language">Languages</option><option value="dialect">Dialects</option></select></div>
+      </div>
+      <p id="catalog-status" data-i18n-dynamic role="status">The complete catalog is available as a CSV download below.</p>
+      <ul class="catalog-results" id="catalog-results" data-i18n-dynamic></ul>
+      <div class="catalog-pagination" id="catalog-pagination" hidden>
+        <button type="button" class="globe-btn" id="catalog-prev">Previous results</button>
+        <button type="button" class="globe-btn" id="catalog-next">Next results</button>
+      </div>
+      <p class="catalog-source">Source: Hammarstr&ouml;m, Forkel, Haspelmath &amp; Bank,
+        <a href="https://glottolog.org/meta/downloads">Glottolog 5.3</a> (2026),
+        <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+        Filtered and reformatted; retrieved October 6, 2026.
+        <a href="language-catalog.csv" download>Download all 21,944 entries (CSV)</a> &middot;
+        <a href="language-catalog-source.json">Count method and attribution</a>.</p>
+      <p>Can&rsquo;t find your variety? <a href="mailto:robotstop.contact@gmail.com?subject=Language%20or%20dialect%20coverage">Tell us its name and region</a>.
+        Catalog inclusion does not limit the expansion program.</p>
+    </div>
+    <div class="language-notes">
+      <h3>Qualification follows each variety</h3>
+      <p>Each release must name the languages, dialects and keywords it covers, with results
+        for normal, raised and shouted speech. A parent language&rsquo;s results do not qualify
+        every dialect. Our protocol calls for at least 20 speakers and 1,000 positive utterances
+        per acoustic condition for each variety claimed, plus confusable speech and noise testing
+        with the full enabled language set.</p>
+    </div>
 
     <p class="kicker kicker-dark kicker-big">
-      Every language at once &mdash;
-      <span class="kicker-accent">protect everyone equally.</span>
+      Our goal: every voice heard.
+      <span class="kicker-accent">Every community included.</span>
     </p>
   </div>
 </section>
@@ -416,7 +454,7 @@
           <li><strong>Full battery cutoff</strong> &mdash; the stop opens the pack contactor and removes power at the source</li>
           <li><strong>Soft stop and hard stop</strong> &mdash; selectable outputs for controlled deceleration or immediate power removal</li>
           <li>Wiring, commissioning and sign-off support against your safety PLC</li>
-          <li>ROS 2 driver integration, custom keywords and languages</li>
+          <li>ROS 2 driver integration, language and dialect evaluation, custom keywords</li>
           <li>Microphone placement and acoustic coverage survey for the cell</li>
           <li>Enclosure and mounting adapted to your machine</li>
         </ul>
@@ -549,7 +587,9 @@
 </footer>
 
 <script src="globe-land.js" defer></script>
+<script src="language-catalog.js" defer></script>
 <script src="globe.js" defer></script>
+<script src="languages.js" defer></script>
 <script src="main.js" defer></script>
 <script src="order.js" defer></script>
 </body>

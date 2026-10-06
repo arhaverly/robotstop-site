@@ -1,0 +1,14 @@
+{
+  "version": "5.3",
+  "accessed": "2026-10-06",
+  "source": "https://cdstar.eva.mpg.de//bitstreams/EAEA0-608B-9919-A962-0/glottolog_languoid.csv.zip",
+  "source_sha256": "47fcc04c18f3f6bff43198b5be14f1f6954600c90573373df9ecf6fc12622bfb",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "citation": "Glottolog 5.3 data download\n===========================\n\nData of Glottolog 5.3 is published under the following license:\nhttps://creativecommons.org/licenses/by/4.0/\n\nIt should be cited as\n\nHammarström, Harald & Forkel, Robert & Haspelmath, Martin & Bank, Sebastian. 2026.\nGlottolog 5.3.\nLeipzig: Max Planck Institute for Evolutionary Anthropology.\nhttps://doi.org/10.5281/zenodo.15525265\n(Available online at http://glottolog.org, Accessed on 2026-03-02.)",
+  "counts": {
+    "language": 8238,
+    "dialect": 13706
+  },
+  "total": 21944,
+  "method": "Include language and dialect levels; exclude families and bookkeeping=True. Counts include historical and non-spoken entries and are not product support counts."
+}

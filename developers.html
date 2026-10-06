@@ -68,7 +68,7 @@
             <td><strong>The answer.</strong> <code>true</code> means the keyword was heard and the detector has asserted its stop. Both microphones feed this: either one hearing it makes it <code>true</code>.</td>
           </tr>
           <tr><td><code>score</code></td><td>float 0&ndash;1</td><td>How confident it was. Useful for logs and graphs &mdash; the operating point is already applied, so do not threshold it yourself.</td></tr>
-          <tr><td><code>keyword</code></td><td>string</td><td>The word this unit listens for.</td></tr>
+          <tr><td><code>keyword</code></td><td>string</td><td>The model&rsquo;s configured keyword label. This binary detector does not identify the spoken language, dialect or exact word.</td></tr>
           <tr><td><code>length_ms</code></td><td>int</td><td>How long the utterance was.</td></tr>
           <tr><td><code>latched</code></td><td>bool</td><td><code>true</code> while a stop is being held. Send <code>Z\n</code> to clear it.</td></tr>
           <tr><td><code>n</code></td><td>int</td><td>Utterance counter since power-on. A gap means you missed a line.</td></tr>
@@ -76,6 +76,17 @@
         </tbody>
       </table>
     </div>
+  </section>
+
+  <section class="docs-section">
+    <h2>Language and dialect coverage</h2>
+    <p>RobotStop&rsquo;s expansion goal is every spoken language and dialect. The
+      <a href="index.html#language-catalog">worldwide catalog</a> is a reference inventory;
+      entries do not automatically become available on a detector. Current development word
+      lists cover English, Mandarin Chinese and Korean, and coverage depends on the installed model.</p>
+    <p>Use the coverage and qualification record for your unit&rsquo;s model version.
+      A language result does not establish coverage for all its dialects. The existing JSON
+      reports a binary stop match; it cannot tell you which language or dialect triggered it.</p>
   </section>
 
   <section class="docs-section">

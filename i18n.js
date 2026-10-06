@@ -25,13 +25,13 @@
   'use strict';
 
   var LANGS = [
-    { code: 'en', label: 'English' },
-    { code: 'es', label: 'Español' },
-    { code: 'zh-Hans', label: '简体中文' },
-    { code: 'zh-Hant', label: '繁體中文' }
+    { code: 'en', label: 'English', short: 'EN' },
+    { code: 'es', label: 'Español', short: 'ES' },
+    { code: 'zh-Hans', label: '简体中文', short: '简' },
+    { code: 'zh-Hant', label: '繁體中文', short: '繁' }
   ];
   var KEY = 'robotstop-lang';
-  var SKIP = { PRE: 1, CODE: 1, SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, SELECT: 1, OPTION: 1 };
+  var SKIP = { PRE: 1, CODE: 1, SCRIPT: 1, STYLE: 1, NOSCRIPT: 1 };
   var ATTRS = ['aria-label', 'title', 'alt', 'placeholder'];
 
   var root = document.documentElement;
@@ -203,8 +203,7 @@
     }
     root.setAttribute('lang', code);
     current = code;
-    var sel = document.getElementById('lang-select');
-    if (sel && sel.value !== code) sel.value = code;
+    syncPicker(code);
     for (i = 0; i < listeners.length; i++) {
       try { listeners[i](code); } catch (e) {}
     }
@@ -236,31 +235,100 @@
 
   /* ---------- the picker ---------- */
 
+  // A nav-weight mono label that opens a small menu of native language names,
+  // rather than a form <select>: it has to sit in the nav like the links do.
+  var pick = null;      // { btn, code, menu, items }
+
+  function syncPicker(code) {
+    if (!pick) return;
+    for (var i = 0; i < LANGS.length; i++) {
+      var on = LANGS[i].code === code;
+      pick.items[i].setAttribute('aria-checked', on ? 'true' : 'false');
+      if (on) pick.code.textContent = LANGS[i].short;
+    }
+  }
+
   function picker() {
     var slot = document.querySelector('[data-lang-picker]');
-    if (!slot || document.getElementById('lang-select')) return;
-    var wrap = document.createElement('label');
+    if (!slot || pick) return;
+    var wrap = document.createElement('div');
     wrap.className = 'lang';
     wrap.setAttribute('translate', 'no');
-    wrap.innerHTML =
-      '<svg class="lang-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.3"/>' +
-      '<path d="M1.5 8h13M8 1.5c-2.2 2-2.2 11 0 13M8 1.5c2.2 2 2.2 11 0 13" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>';
-    var sel = document.createElement('select');
-    sel.id = 'lang-select';
-    sel.className = 'lang-select';
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'lang-btn';
+    btn.id = 'lang-btn';
+    btn.setAttribute('aria-haspopup', 'menu');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', 'lang-menu');
     // Fixed, multilingual name so it reads correctly whatever the page is in.
-    sel.setAttribute('aria-label', 'Language · Idioma · 语言 · 語言');
-    for (var i = 0; i < LANGS.length; i++) {
-      var o = document.createElement('option');
-      o.value = LANGS[i].code;
-      o.textContent = LANGS[i].label;
-      o.lang = LANGS[i].code;
-      sel.appendChild(o);
+    btn.setAttribute('aria-label', 'Language · Idioma · 语言 · 語言');
+    btn.innerHTML = '<span class="lang-code"></span>' +
+      '<svg class="lang-chev" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>';
+
+    var menu = document.createElement('ul');
+    menu.className = 'lang-menu';
+    menu.id = 'lang-menu';
+    menu.setAttribute('role', 'menu');
+    menu.setAttribute('aria-labelledby', 'lang-btn');
+    menu.hidden = true;
+
+    var items = LANGS.map(function (L) {
+      var li = document.createElement('li');
+      li.setAttribute('role', 'none');
+      var it = document.createElement('button');
+      it.type = 'button';
+      it.className = 'lang-item';
+      it.setAttribute('role', 'menuitemradio');
+      it.setAttribute('lang', L.code);
+      it.setAttribute('data-code', L.code);
+      it.tabIndex = -1;
+      it.innerHTML = '<span class="lang-name"></span><span class="lang-tag"></span>';
+      it.firstChild.textContent = L.label;
+      it.lastChild.textContent = L.short;
+      it.addEventListener('click', function () { close(true); setLanguage(L.code, true); });
+      li.appendChild(it);
+      menu.appendChild(li);
+      return it;
+    });
+
+    function open(focusIndex) {
+      menu.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      wrap.classList.add('is-open');
+      var i = focusIndex;
+      if (i == null) for (i = 0; i < items.length && items[i].getAttribute('aria-checked') !== 'true'; i++);
+      (items[i] || items[0]).focus();
     }
-    sel.value = current;
-    sel.addEventListener('change', function () { setLanguage(sel.value, true); });
-    wrap.appendChild(sel);
+    function close(refocus) {
+      if (menu.hidden) return;
+      menu.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+      wrap.classList.remove('is-open');
+      if (refocus) btn.focus();
+    }
+
+    btn.addEventListener('click', function () { if (menu.hidden) open(); else close(false); });
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); open(e.key === 'ArrowUp' ? items.length - 1 : null); }
+    });
+    menu.addEventListener('keydown', function (e) {
+      var i = items.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+      else if (e.key === 'Home') { e.preventDefault(); items[0].focus(); }
+      else if (e.key === 'End') { e.preventDefault(); items[items.length - 1].focus(); }
+      else if (e.key === 'Escape') { e.preventDefault(); close(true); }
+      else if (e.key === 'Tab') close(false);
+    });
+    document.addEventListener('click', function (e) { if (!wrap.contains(e.target)) close(false); });
+
+    wrap.appendChild(btn);
+    wrap.appendChild(menu);
     slot.appendChild(wrap);
+    pick = { btn: btn, code: btn.firstChild, menu: menu, items: items };
+    syncPicker(current);
   }
 
   /* ---------- start ---------- */
@@ -280,6 +348,16 @@
     l.href = 'https://fonts.googleapis.com/css2?family=' + CJK[code] + '&display=swap';
     document.head.appendChild(l);
   }
+
+  // The picker names 简体中文 and 繁體中文 on every page, so fetch just those
+  // glyphs (a few KB via &text=) for systems with no CJK font at all.
+  (function () {
+    var l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500&family=Noto+Sans+TC:wght@500' +
+      '&text=' + encodeURIComponent('简体中文繁體') + '&display=swap';
+    document.head.appendChild(l);
+  })();
 
   var initial = choose();
   root.setAttribute('lang', initial);
