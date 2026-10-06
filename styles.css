@@ -1640,3 +1640,14 @@ html:lang(en) .i18n-note { display: none; }
 .docs-body .bvb-tip .bvb-tip-verdict { margin-top: 6px; color: var(--text); font-weight: 600; }
 .docs-body .bvb-chart-note { font-size: 14px; margin-top: 12px; }
 .bvb-plot .cz-label-end { text-anchor: end; }
+
+.volume-note {
+  margin-top: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--green);
+  border-radius: var(--r);
+  background: #f3f8f5;
+}
+.docs-body .volume-note-head { margin: 0; font-weight: 600; color: var(--text); }
+.docs-body .volume-note p + p { margin-top: 6px; font-size: 15px; }

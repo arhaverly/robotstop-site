@@ -1,32 +1,44 @@
 /* build-vs-buy.html: the cost chart and the break-even calculator. One model
    for both, and for the static table: buying is $2 a unit after a free first
-   one; building is your engineering plus the same ~$1 of hardware per unit.
+   one, or $1.10 a unit (~$1 hardware + $0.10) on orders over 10,000; building
+   is your engineering plus the same ~$1 of hardware per unit.
 
    chartMarkup() is also run at build time by tools/render_bvb_chart.js, which
    writes its output into the page so the chart is there with JavaScript off. */
 (function (root) {
   'use strict';
 
-  var PRICE = 2;
-  var HARDWARE = 1;
+  // Cents, so $1.10 x n stays exact; dollars only at the edges.
+  var PRICE = 200;
+  var VOLUME_MIN = 10000;
+  var VOLUME_PRICE = 110;
+  var HARDWARE = 100;
 
   var W = 720, H = 380;
   var M = { t: 22, r: 128, b: 50, l: 70 };
   var PW = W - M.l - M.r, PH = H - M.t - M.b;
 
-  var buyCost = function (n) { return Math.max(0, n - 1) * PRICE; };
-  var buildCost = function (n, e) { return e + n * HARDWARE; };
-  // 2(n - 1) = e + n  =>  n = e + 2
-  var breakEven = function (e) { return Math.ceil((e + PRICE) / (PRICE - HARDWARE)); };
+  var buyCost = function (n) {
+    return (n > VOLUME_MIN ? n * VOLUME_PRICE : Math.max(0, n - 1) * PRICE) / 100;
+  };
+  var buildCost = function (n, e) { return e + n * HARDWARE / 100; };
+  // The unit count past which building is always cheaper. Over 10,000 units:
+  // 1.10n = e + n  =>  n = e / 0.10. If that lands at or under 10,000, the
+  // crossing is in the $2 tier: 2(n - 1) = e + n  =>  n = e + 2.
+  var breakEven = function (e) {
+    var vol = Math.ceil(e * 100 / (VOLUME_PRICE - HARDWARE));
+    return vol > VOLUME_MIN ? vol : Math.ceil((e + PRICE / 100) * 100 / (PRICE - HARDWARE));
+  };
 
-  // Smallest max >= v whose quarter is 1, 2, 2.5 or 5 x 10^n, so ticks are round.
+  // Smallest max >= v whose quarter is a round number, so ticks are round.
   var nice = function (v) {
     var q = Math.max(v, 1) / 4, p = Math.pow(10, Math.floor(Math.log10(q)));
-    var m = [1, 2, 2.5, 5, 10].filter(function (c) { return c * p >= q; })[0];
+    var m = [1, 1.5, 2, 2.5, 3, 4, 5, 7.5, 10].filter(function (c) { return c * p >= q; })[0];
     return m * p * 4;
   };
   var k = function (n) {
     if (n === 0) return '0';
+    if (n < 1000) return String(Math.round(n));
     if (n >= 1e6) return +(n / 1e6).toFixed(2) + 'M';
     return +(n / 1000).toFixed(1) + 'k';
   };
@@ -73,11 +85,14 @@
 
     // The two lines. In-house is dashed, so identity is not color alone.
     out.push('<line class="ln ln-build" x1="' + M.l + '" y1="' + f(y(buildCost(0, e))) + '" x2="' + (M.l + PW) + '" y2="' + f(y(buildCost(s.xMax, e))) + '"/>');
-    out.push('<line class="ln ln-buy" x1="' + M.l + '" y1="' + f(y(0)) + '" x2="' + (M.l + PW) + '" y2="' + f(y(buyCost(s.xMax))) + '"/>');
+    var pts = [[0, 0]];
+    if (s.xMax > VOLUME_MIN) pts.push([VOLUME_MIN, buyCost(VOLUME_MIN)], [VOLUME_MIN, VOLUME_MIN * VOLUME_PRICE / 100]);
+    pts.push([s.xMax, buyCost(s.xMax)]);
+    out.push('<polyline class="ln ln-buy" points="' + pts.map(function (p) { return f(x(p[0])) + ',' + f(y(p[1])); }).join(' ') + '"/>');
 
     // Direct labels at the line ends.
     var yb = y(buyCost(s.xMax)), yh = y(buildCost(s.xMax, e));
-    if (Math.abs(yb - yh) < 30) { var mid = (yb + yh) / 2; yb = mid - 15; yh = mid + 15; }
+    if (Math.abs(yb - yh) < 38) { var mid = (yb + yh) / 2; yb = mid - 19; yh = mid + 19; }
     var lx = M.l + PW + 10;
     out.push('<text class="end-label" x="' + lx + '" y="' + f(yb - 2) + '">Buy</text>');
     out.push('<text class="end-value" x="' + lx + '" y="' + f(yb + 14) + '">' + usd(buyCost(s.xMax)) + '</text>');
@@ -200,7 +215,7 @@
     $('calc-even').textContent = breakEven(e).toLocaleString('en-US') + ' units';
 
     var gap = Math.abs(build - buy), verdict = $('calc-verdict');
-    if (gap < Math.max(1000, 0.02 * build)) {
+    if (gap <= 0.02 * build) {
       verdict.textContent = 'About even. Pick whichever you would rather maintain.';
     } else if (buy < build) {
       verdict.textContent = 'Buying is cheaper by ' + usd(gap) + '.';

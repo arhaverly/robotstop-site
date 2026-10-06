@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RobotStop — build it or buy it: the honest math</title>
-<meta name="description" content="Where each $2 RobotStop detector goes, what it costs an engineering team to build a voice stop in house, and the unit count at which building it yourself starts to make sense.">
+<meta name="description" content="Where each $2 RobotStop detector goes (about $1.10 over 10,000 units), what it costs an engineering team to build a voice stop in house, and the unit count at which building it yourself starts to make sense.">
 <meta name="theme-color" content="#0a0c0d">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,8 +40,8 @@
     <p class="eyebrow">Build it or buy it &middot; the honest math</p>
     <h1 class="docs-title">Should you build this yourself? <span class="hero-title-accent">Maybe.</span> Here are the numbers.</h1>
     <p class="docs-lede">
-      A detector costs $2, and your first one is free. Here is where those two
-      dollars go, what it would cost your team to build the same thing, and the
+      A detector costs $2, and your first one is free. Over 10,000 units, it
+      costs about $1.10. Here is where that money goes, what it would cost your team to build the same thing, and the
       point at which building it yourself is the right call. Some companies are
       past that point. Most of the ones we talk to are not.
     </p>
@@ -70,12 +70,21 @@
       </div>
     </div>
 
+    <div class="volume-note">
+      <p class="volume-note-head">Over 10,000 units: volume pricing, about $1.10 a unit</p>
+      <p>Ship more than 10,000 units and we drop the software charge. You pay
+      the ~$1 of hardware, manufacturing and shipping, plus <strong>$0.10 a
+      unit for us</strong>. That applies to every unit in the order, not just
+      the ones past 10,000.</p>
+    </div>
+
     <p>
       The hardware dollar does not go away if you build it in house; you still
       need a microphone, a microcontroller and a board. <strong>The software
-      dollar is the only thing building it yourself can save you.</strong> So
-      the real question is whether your engineering costs less than one dollar
-      times the number of units you ship.
+      dollar is the only thing building it yourself can save you</strong>, and
+      past 10,000 units that is ten cents. So the real question is whether
+      your engineering costs less than what you would save on every unit you
+      ship.
     </p>
   </section>
 
@@ -123,11 +132,12 @@
   <section class="docs-section" id="breakeven">
     <h2>Where building it starts to pay</h2>
     <p>
-      Buying costs $2 a unit after the first. Building costs your engineering
-      up front plus the same hardware dollar per unit. Each unit you build
-      yourself saves you about $1, so <strong>you need to ship roughly one unit
-      for every dollar of engineering before building it pays off.</strong> At
-      $50,000 of engineering, that is about 50,000 units.
+      Buying costs $2 a unit after the first, and about $1.10 a unit over
+      10,000. Building costs your engineering up front plus the same hardware
+      dollar per unit. At volume, each unit you build yourself saves you about
+      ten cents, so <strong>you need to ship roughly ten units for every dollar
+      of engineering before building it pays off.</strong> At $50,000 of
+      engineering, that is about 500,000 units.
     </p>
 
     <figure class="bvb-chart" id="chart">
@@ -141,7 +151,7 @@
       <div class="bvb-plot" id="chart-plot">
         <svg viewBox="0 0 720 380" id="chart-svg" data-i18n-dynamic role="img" aria-labelledby="chart-desc" tabindex="0">
           <desc id="chart-desc">Line chart of total cost against units shipped. Buying RobotStop costs less up to about 50,000 units; past that, building it in house costs less. The full numbers are in the table below.</desc>
-          <!--chart--><rect class="cz cz-buy" x="70.0" y="22" width="261.0" height="308"/><text class="cz-label cz-label-buy" x="82.0" y="44">RobotStop is cheaper</text><text class="cz-label cz-label-end" x="580.0" y="316">Building it is cheaper</text><line class="grid" x1="70" x2="592" y1="330.0" y2="330.0"/><text class="tick tick-y" x="60" y="334.0">$0</text><line class="grid" x1="70" x2="592" y1="253.0" y2="253.0"/><text class="tick tick-y" x="60" y="257.0">$50k</text><line class="grid" x1="70" x2="592" y1="176.0" y2="176.0"/><text class="tick tick-y" x="60" y="180.0">$100k</text><line class="grid" x1="70" x2="592" y1="99.0" y2="99.0"/><text class="tick tick-y" x="60" y="103.0">$150k</text><line class="grid" x1="70" x2="592" y1="22.0" y2="22.0"/><text class="tick tick-y" x="60" y="26.0">$200k</text><text class="tick tick-x" x="70.0" y="352">0</text><text class="tick tick-x" x="200.5" y="352">25k</text><text class="tick tick-x" x="331.0" y="352">50k</text><text class="tick tick-x" x="461.5" y="352">75k</text><text class="tick tick-x" x="592.0" y="352">100k</text><line class="axis" x1="70" x2="592" y1="330" y2="330"/><text class="axis-title" x="331" y="374">Units shipped of one device</text><line class="even-guide" x1="331.0" x2="331.0" y1="22" y2="330"/><line class="ln ln-build" x1="70" y1="253.0" x2="592" y2="99.0"/><line class="ln ln-buy" x1="70" y1="330.0" x2="592" y2="22.0"/><text class="end-label" x="602" y="20.0">Buy</text><text class="end-value" x="602" y="36.0">$199,998</text><text class="end-label" x="602" y="97.0">Build</text><text class="end-value" x="602" y="113.0">$150,000</text><circle class="even-dot" cx="331.0" cy="176.0" r="5"/><text class="even-label" x="341.0" y="200.0">Break-even</text><text class="even-value" x="341.0" y="216.0">~50,000 units</text><g class="xhair" id="chart-xhair" style="display:none"><line class="xhair-line" y1="22" y2="330"/><circle class="xhair-dot xhair-buy" r="4.5"/><circle class="xhair-dot xhair-build" r="4.5"/></g><rect class="hit" id="chart-hit" x="70" y="22" width="522" height="308"/><!--/chart-->
+          <!--chart--><rect class="cz cz-buy" x="70.0" y="22" width="261.0" height="308"/><text class="cz-label cz-label-buy" x="82.0" y="44">RobotStop is cheaper</text><text class="cz-label cz-label-end" x="580.0" y="316">Building it is cheaper</text><line class="grid" x1="70" x2="592" y1="330.0" y2="330.0"/><text class="tick tick-y" x="60" y="334.0">$0</text><line class="grid" x1="70" x2="592" y1="253.0" y2="253.0"/><text class="tick tick-y" x="60" y="257.0">$300k</text><line class="grid" x1="70" x2="592" y1="176.0" y2="176.0"/><text class="tick tick-y" x="60" y="180.0">$600k</text><line class="grid" x1="70" x2="592" y1="99.0" y2="99.0"/><text class="tick tick-y" x="60" y="103.0">$900k</text><line class="grid" x1="70" x2="592" y1="22.0" y2="22.0"/><text class="tick tick-y" x="60" y="26.0">$1.2M</text><text class="tick tick-x" x="70.0" y="352">0</text><text class="tick tick-x" x="200.5" y="352">250k</text><text class="tick tick-x" x="331.0" y="352">500k</text><text class="tick tick-x" x="461.5" y="352">750k</text><text class="tick tick-x" x="592.0" y="352">1M</text><line class="axis" x1="70" x2="592" y1="330" y2="330"/><text class="axis-title" x="331" y="374">Units shipped of one device</text><line class="even-guide" x1="331.0" x2="331.0" y1="22" y2="330"/><line class="ln ln-build" x1="70" y1="317.2" x2="592" y2="60.5"/><polyline class="ln ln-buy" points="70.0,330.0 75.2,324.9 75.2,327.2 592.0,47.7"/><text class="end-label" x="602" y="33.1">Buy</text><text class="end-value" x="602" y="49.1">$1,100,000</text><text class="end-label" x="602" y="71.1">Build</text><text class="end-value" x="602" y="87.1">$1,050,000</text><circle class="even-dot" cx="331.0" cy="188.8" r="5"/><text class="even-label" x="341.0" y="212.8">Break-even</text><text class="even-value" x="341.0" y="228.8">~500,000 units</text><g class="xhair" id="chart-xhair" style="display:none"><line class="xhair-line" y1="22" y2="330"/><circle class="xhair-dot xhair-buy" r="4.5"/><circle class="xhair-dot xhair-build" r="4.5"/></g><rect class="hit" id="chart-hit" x="70" y="22" width="522" height="308"/><!--/chart-->
         </svg>
         <div class="bvb-tip" id="chart-tip" data-i18n-dynamic hidden></div>
       </div>
@@ -176,14 +186,16 @@
         <tbody>
           <tr><td>1,000</td><td class="num">$1,998</td><td class="num">$51,000</td><td>Buy, by $49,000</td></tr>
           <tr><td>5,000</td><td class="num">$9,998</td><td class="num">$55,000</td><td>Buy, by $45,000</td></tr>
-          <tr><td>20,000</td><td class="num">$39,998</td><td class="num">$70,000</td><td>Buy, by $30,000</td></tr>
-          <tr><td>50,000</td><td class="num">$99,998</td><td class="num">$100,000</td><td>About even</td></tr>
-          <tr><td>100,000</td><td class="num">$199,998</td><td class="num">$150,000</td><td>Build, by $50,000</td></tr>
+          <tr><td>20,000</td><td class="num">$22,000</td><td class="num">$70,000</td><td>Buy, by $48,000</td></tr>
+          <tr><td>100,000</td><td class="num">$110,000</td><td class="num">$150,000</td><td>Buy, by $40,000</td></tr>
+          <tr><td>500,000</td><td class="num">$550,000</td><td class="num">$550,000</td><td>About even</td></tr>
+          <tr><td>1,000,000</td><td class="num">$1,100,000</td><td class="num">$1,050,000</td><td>Build, by $50,000</td></tr>
         </tbody>
       </table>
     </div>
     <p class="small">
-      Build cost is engineering plus $1 of hardware per unit. That assumes
+      Buy is $2 a unit after a free first one, or $1.10 a unit for orders over
+      10,000. Build cost is engineering plus $1 of hardware per unit. That assumes
       your hardware costs what ours does. At small volumes it usually costs
       more, which moves the break-even point further out.
     </p>
@@ -196,7 +208,7 @@
       so here than waste your time on a call. Build it if:
     </p>
     <ul class="tick-list">
-      <li><strong>You ship tens of thousands of units of one device.</strong> Past about 50,000, the dollar a unit you save is larger than the engineering you spend.</li>
+      <li><strong>You ship hundreds of thousands of units of one device.</strong> With volume pricing you save about ten cents a unit by building, so at $50,000 of engineering it takes about 500,000 units to come out ahead.</li>
       <li>You already have people who do embedded machine learning and have time on their schedule.</li>
       <li>The detector has to live on your own main board, sharing a processor you already pay for, so even our hardware dollar goes away.</li>
     </ul>
@@ -210,11 +222,12 @@
     <h2>Who we built this for</h2>
     <p>
       Teams that ship <strong>fewer than 20,000 units of each device</strong>.
-      At 20,000 units you pay us about $40,000 in total. About half of that is
-      hardware you would have bought anyway, so you are paying about $20,000
-      for the software. That is less than half the low end of the in-house
-      estimate, with nothing to build and no schedule to slip, and it keeps
-      working when you change robots.
+      Under 10,000 units you pay $2 a unit, and at 10,000 that is about $20,000
+      in total: less than half the low end of the in-house estimate, with
+      nothing to build and no schedule to slip. Past 10,000 it gets cheaper
+      still. At 20,000 units you pay about $22,000, of which about $20,000 is
+      hardware you would have bought anyway, so the software costs you about
+      $2,000.
     </p>
     <p>
       At that volume, a voice stop is a feature you need, not a product you
@@ -225,7 +238,7 @@
   <section class="docs-section" id="assumptions">
     <h2>What these numbers assume</h2>
     <ul class="tick-list">
-      <li>The $1 / $1 split is approximate and averaged across a production run; it moves a little with volume and freight.</li>
+      <li>The $1 / $1 split is approximate and averaged across a production run; it moves a little with volume and freight. Volume pricing is that same ~$1 plus $0.10.</li>
       <li>Engineering at $3,500 per engineer-week, for someone who has built this kind of system before. Learning on the job costs more.</li>
       <li>One language, one device, one board design. Each additional language or board adds to the in-house cost, but not to ours.</li>
       <li>No certification work on either side. Today&rsquo;s units are uncertified evaluation units; see <a href="legal.html">the terms</a>.</li>
