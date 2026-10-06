@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RobotStop — the voice stop for robots you already own</title>
-<meta name="description" content="RobotStop is a voice-activated stop-request module that bolts onto a robot you already own. Two independent channels, on-device detection, no cloud. $20 per detector.">
+<meta name="description" content="RobotStop is a voice-activated stop-request module that bolts onto a robot you already own. On-device detection, no cloud, no network. First unit free, then $2 each.">
 <meta name="theme-color" content="#0a0c0d">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta property="og:title" content="RobotStop — say stop, it stops">
@@ -36,11 +36,12 @@
       <a href="#languages">Languages</a>
       <a href="#diy">Vs. building it</a>
       <a href="#offerings">Pricing</a>
+      <a href="build-vs-buy.html">Build vs. buy</a>
       <a href="#standards">Standards</a>
       <a class="nav-link-alt" href="developers.html">Developers</a>
     </nav>
     <div class="nav-lang" data-lang-picker></div>
-    <a class="btn btn-sm btn-primary" href="#contact">Request a unit</a>
+    <a class="btn btn-sm btn-primary" href="#offerings">Order units</a>
   </div>
 </header>
 
@@ -59,7 +60,7 @@
       no network. When anyone in the room says stop, power drops.
     </p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="#contact">Request a unit &mdash; $20</a>
+      <a class="btn btn-primary" href="#offerings">First unit free &mdash; then $2</a>
       <a class="btn btn-ghost" href="#how">See how it works</a>
     </div>
     <p class="hero-notice">
@@ -364,6 +365,7 @@
     </div>
 
     <p class="kicker">Nobody wants to own the safety feature. Own the robot; let us own the stop.</p>
+    <p class="diy-more"><a href="build-vs-buy.html">The honest math: what building it in house costs, and when it is worth it &rarr;</a></p>
   </div>
 </section>
 
@@ -378,17 +380,28 @@
         <header>
           <p class="price-tag">Out of the box</p>
           <h3>RobotStop Detector</h3>
-          <p class="price"><span class="price-num">$20</span><span class="price-unit">/ detector</span></p>
-          <p class="price-note">Today&rsquo;s price. It gets cheaper as volume grows.</p>
+          <p class="price"><span class="price-num">$2</span><span class="price-unit">/ detector &middot; your first one is free</span></p>
+          <p class="price-note">About $1 of that is the hardware. <a class="price-link" href="build-vs-buy.html">Where the other dollar goes</a>.</p>
         </header>
         <ul class="feat">
           <li>Plug in, attach to the robot you already own</li>
-          <li>Normally-closed dry contact wires into an existing protective-stop input</li>
-          <li>Listening from boot &mdash; no setup, no account, no network</li>
-          <li>USB-C for status, event log and firmware updates</li>
-          <li>Front-panel Ready / Stop / Fault indicators</li>
+          <li>Listening from boot &mdash; no setup, no account, no network, no wake word</li>
+          <li>3.3&thinsp;V logic output, de-energize to stop &mdash; drive an optocoupler or a relay coil. <em>The OSSD pair and NC dry relay ship with the certified module.</em></li>
+          <li>USB-C: status, JSON per detection, and it types results as a USB keyboard with no driver</li>
+          <li>Red / green verdict LED</li>
+          <li><strong>English, uncertified, one detection path.</strong> An evaluation unit, not a safety device</li>
         </ul>
-        <a class="btn btn-outline" href="#contact">Order detectors</a>
+        <form class="order" id="order" action="mailto:robotstop.contact@gmail.com" method="get">
+          <label class="order-label" for="order-qty">How many?</label>
+          <div class="order-row">
+            <input class="order-qty" id="order-qty" type="number" name="qty" min="1" max="20000" step="1" value="1" inputmode="numeric">
+            <output class="order-total" id="order-total" data-i18n-dynamic for="order-qty" aria-live="polite">Free</output>
+          </div>
+          <p class="order-math" id="order-math" data-i18n-dynamic>1 free unit</p>
+          <input type="hidden" name="subject" value="RobotStop order">
+          <button class="btn btn-primary" type="submit" id="order-btn" data-i18n-dynamic>Order 1 unit</button>
+          <p class="order-fine">Sends us an order email. We reply with an invoice and a ship date; nothing is charged until you approve it.</p>
+        </form>
       </article>
 
       <article class="card card-price card-feature">
@@ -445,8 +458,8 @@
         <ul class="tick-list">
           <li>A supplementary protective measure: one more stop-request input to the safety-related control system your machine already has.</li>
           <li>Designed to an ISO 13849-1 Category 3 architecture, targeting PL d, so certification is possible without a redesign.</li>
-          <li>Frozen at release. No field learning, no drifting thresholds; signed firmware and secure boot.</li>
-          <li>Entirely local. No radio transmitter, no outbound connection, no continuous audio stored.</li>
+          <li>Frozen at release. No field learning, no drifting thresholds. Signed firmware and secure boot ship with the certified module.</li>
+          <li>Entirely local. No network connection, nothing outbound, no continuous audio stored. The radio on today&rsquo;s module is unused and disabled in firmware; the certified part will not have one.</li>
         </ul>
       </div>
       <div class="split-col">
@@ -508,8 +521,8 @@
       takes &mdash; including when the answer is that you don&rsquo;t need us yet.
     </p>
     <div class="hero-actions cta-actions">
-      <a class="btn btn-primary btn-lg" href="mailto:hello@robotstop.com?subject=RobotStop%20enquiry">hello@robotstop.com</a>
-      <a class="btn btn-ghost btn-lg" href="mailto:hello@robotstop.com?subject=RobotStop%20detector%20order">Order detectors &mdash; $20 each</a>
+      <a class="btn btn-primary btn-lg" href="mailto:robotstop.contact@gmail.com?subject=RobotStop%20enquiry">robotstop.contact@gmail.com</a>
+      <a class="btn btn-ghost btn-lg" href="#offerings">Order units &mdash; first one free</a>
     </div>
   </div>
 </section>
@@ -523,6 +536,7 @@
       <p>Voice stop-request modules for physical AI.</p>
       <p class="footer-links">
         <a href="developers.html">Developers</a> &middot;
+        <a href="build-vs-buy.html">Build vs. buy</a> &middot;
         <a href="legal.html">Legal &amp; safety notice</a>
       </p>
     </div>
@@ -537,5 +551,6 @@
 <script src="globe-land.js" defer></script>
 <script src="globe.js" defer></script>
 <script src="main.js" defer></script>
+<script src="order.js" defer></script>
 </body>
 </html>

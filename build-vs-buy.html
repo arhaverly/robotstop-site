@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RobotStop — build it or buy it: the honest math</title>
+<meta name="description" content="Where each $2 RobotStop detector goes, what it costs an engineering team to build a voice stop in house, and the unit count at which building it yourself starts to make sense.">
+<meta name="theme-color" content="#0a0c0d">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="i18n.js"></script>
+</head>
+<body class="docs">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="shell nav-inner">
+    <a class="brand" href="index.html" aria-label="RobotStop home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M10.822 3.5 L21.178 3.5 L28.5 10.822 L28.5 21.178 L21.178 28.5 L10.822 28.5 L3.5 21.178 L3.5 10.822 Z" fill="none" stroke="currentColor" stroke-width="3.00" stroke-linejoin="round"/>
+        <path d="M7.25 13.464 L14.625 15.161 L14.625 18.536 L7.25 16.839 Z" fill="currentColor"/>
+        <path d="M24.75 13.464 L17.375 15.161 L17.375 18.536 L24.75 16.839 Z" fill="currentColor"/>
+      </svg>
+      <span class="brand-word" translate="no">Robot<span class="brand-word-accent">Stop</span></span>
+      <span class="brand-tag">Build vs. buy</span>
+    </a>
+    <div class="nav-lang" data-lang-picker></div>
+    <a class="btn btn-sm btn-primary" href="index.html#offerings">Order units</a>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="docs-hero">
+  <div class="shell docs-single">
+    <p class="eyebrow">Build it or buy it &middot; the honest math</p>
+    <h1 class="docs-title">Should you build this yourself? <span class="hero-title-accent">Maybe.</span> Here are the numbers.</h1>
+    <p class="docs-lede">
+      A detector costs $2, and your first one is free. Here is where those two
+      dollars go, what it would cost your team to build the same thing, and the
+      point at which building it yourself is the right call. Some companies are
+      past that point. Most of the ones we talk to are not.
+    </p>
+  </div>
+</section>
+
+<div class="shell docs-single docs-body docs-plain">
+
+  <section class="docs-section" id="split">
+    <h2>Where your $2 goes</h2>
+    <p>
+      We put the split on the page because the rest of this comparison only
+      works if you can check it.
+    </p>
+
+    <div class="dollar-split" role="img" aria-label="Of each $2: about $1 for hardware, manufacturing and shipping; about $1 for software and profit.">
+      <div class="dollar-half dollar-hw">
+        <span class="dollar-amt">~$1</span>
+        <span class="dollar-what">Hardware, manufacturing, shipping</span>
+        <span class="dollar-why">Parts, board assembly, test, case, box, freight. You would pay this too.</span>
+      </div>
+      <div class="dollar-half dollar-sw">
+        <span class="dollar-amt">~$1</span>
+        <span class="dollar-what">Software and profit</span>
+        <span class="dollar-why">The model, the firmware, the test protocol, updates, support &mdash; and our margin.</span>
+      </div>
+    </div>
+
+    <p>
+      The hardware dollar does not go away if you build it in house; you still
+      need a microphone, a microcontroller and a board. <strong>The software
+      dollar is the only thing building it yourself can save you.</strong> So
+      the real question is whether your engineering costs less than one dollar
+      times the number of units you ship.
+    </p>
+  </section>
+
+  <section class="docs-section" id="build">
+    <h2>What building it in house costs</h2>
+    <p>
+      A voice stop that works in a demo is a weekend project. One that hears
+      &ldquo;stop&rdquo; across a loud room, ignores &ldquo;don&rsquo;t
+      stop&rdquo; and the robot&rsquo;s own speaker, runs on a microcontroller
+      and fails toward stopping takes a few months. This estimate assumes one
+      engineer who already knows embedded machine learning and doesn&rsquo;t
+      have to learn it on the job.
+    </p>
+
+    <div class="table-scroll">
+      <table class="docs-table bvb-table">
+        <thead>
+          <tr><th scope="col">Work</th><th scope="col" class="num">Engineer-weeks</th><th scope="col" class="num">Cost</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Speech data.</strong> Many speakers, accents and distances saying the word; synthetic voices; the hard negatives (&ldquo;don&rsquo;t stop&rdquo;, &ldquo;bus stop&rdquo;)</td><td class="num">3&ndash;5</td><td class="num">$10,500&ndash;17,500</td></tr>
+          <tr><td><strong>Model.</strong> Train it, shrink it to fit a microcontroller, tune false triggers against hours of real floor noise</td><td class="num">2&ndash;4</td><td class="num">$7,000&ndash;14,000</td></tr>
+          <tr><td><strong>Firmware.</strong> Audio capture, feature extraction, on-device inference, a latched stop output, USB</td><td class="num">3&ndash;5</td><td class="num">$10,500&ndash;17,500</td></tr>
+          <tr><td><strong>Board.</strong> Schematic, layout, two prototype spins, plus $1,500&ndash;3,000 in boards and parts</td><td class="num">2&ndash;4</td><td class="num">$8,500&ndash;17,000</td></tr>
+          <tr><td><strong>Enclosure and mounting.</strong> Plus $500&ndash;1,500 in prints and tooling</td><td class="num">1&ndash;2</td><td class="num">$4,000&ndash;8,500</td></tr>
+          <tr><td><strong>Validation.</strong> A test rig, distance and noise sweeps, latency, plus about $500 of equipment</td><td class="num">2&ndash;3</td><td class="num">$7,500&ndash;11,000</td></tr>
+          <tr class="bvb-total"><td><strong>Total</strong></td><td class="num"><strong>13&ndash;23</strong></td><td class="num"><strong>$48,000&ndash;85,500</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">
+      Priced at $3,500 per engineer-week: about $175,000 a year fully loaded
+      (salary, benefits, overhead), over 50 working weeks.
+    </p>
+
+    <p>
+      <strong>Call it $50,000 to $85,000, three to six months, for one
+      language.</strong> That doesn&rsquo;t include keeping it working: firmware
+      fixes, new languages, a new microphone when a part goes end-of-life, or
+      re-testing after each change. It also doesn&rsquo;t include the safety
+      case, which is the part your safety officer will actually ask about.
+    </p>
+  </section>
+
+  <section class="docs-section" id="breakeven">
+    <h2>Where building it starts to pay</h2>
+    <p>
+      Buying costs $2 a unit after the first. Building costs your engineering
+      up front plus the same hardware dollar per unit. Each unit you build
+      yourself saves you about $1, so <strong>you need to ship roughly one unit
+      for every dollar of engineering before building it pays off.</strong> At
+      $50,000 of engineering, that is about 50,000 units.
+    </p>
+
+    <figure class="bvb-chart" id="chart">
+      <figcaption>
+        <span class="bvb-chart-title">Total cost as you ship more units</span>
+        <span class="bvb-legend">
+          <span class="bvb-key"><span class="bvb-swatch bvb-swatch-buy"></span>Buy RobotStop &mdash; $2 a unit</span>
+          <span class="bvb-key"><span class="bvb-swatch bvb-swatch-build"></span>Build in house &mdash; <span id="chart-nre-label" data-i18n-dynamic>$50,000</span> + $1 a unit</span>
+        </span>
+      </figcaption>
+      <div class="bvb-plot" id="chart-plot">
+        <svg viewBox="0 0 720 380" id="chart-svg" data-i18n-dynamic role="img" aria-labelledby="chart-desc" tabindex="0">
+          <desc id="chart-desc">Line chart of total cost against units shipped. Buying RobotStop costs less up to about 50,000 units; past that, building it in house costs less. The full numbers are in the table below.</desc>
+          <!--chart--><rect class="cz cz-buy" x="70.0" y="22" width="261.0" height="308"/><text class="cz-label cz-label-buy" x="82.0" y="44">RobotStop is cheaper</text><text class="cz-label cz-label-end" x="580.0" y="316">Building it is cheaper</text><line class="grid" x1="70" x2="592" y1="330.0" y2="330.0"/><text class="tick tick-y" x="60" y="334.0">$0</text><line class="grid" x1="70" x2="592" y1="253.0" y2="253.0"/><text class="tick tick-y" x="60" y="257.0">$50k</text><line class="grid" x1="70" x2="592" y1="176.0" y2="176.0"/><text class="tick tick-y" x="60" y="180.0">$100k</text><line class="grid" x1="70" x2="592" y1="99.0" y2="99.0"/><text class="tick tick-y" x="60" y="103.0">$150k</text><line class="grid" x1="70" x2="592" y1="22.0" y2="22.0"/><text class="tick tick-y" x="60" y="26.0">$200k</text><text class="tick tick-x" x="70.0" y="352">0</text><text class="tick tick-x" x="200.5" y="352">25k</text><text class="tick tick-x" x="331.0" y="352">50k</text><text class="tick tick-x" x="461.5" y="352">75k</text><text class="tick tick-x" x="592.0" y="352">100k</text><line class="axis" x1="70" x2="592" y1="330" y2="330"/><text class="axis-title" x="331" y="374">Units shipped of one device</text><line class="even-guide" x1="331.0" x2="331.0" y1="22" y2="330"/><line class="ln ln-build" x1="70" y1="253.0" x2="592" y2="99.0"/><line class="ln ln-buy" x1="70" y1="330.0" x2="592" y2="22.0"/><text class="end-label" x="602" y="20.0">Buy</text><text class="end-value" x="602" y="36.0">$199,998</text><text class="end-label" x="602" y="97.0">Build</text><text class="end-value" x="602" y="113.0">$150,000</text><circle class="even-dot" cx="331.0" cy="176.0" r="5"/><text class="even-label" x="341.0" y="200.0">Break-even</text><text class="even-value" x="341.0" y="216.0">~50,000 units</text><g class="xhair" id="chart-xhair" style="display:none"><line class="xhair-line" y1="22" y2="330"/><circle class="xhair-dot xhair-buy" r="4.5"/><circle class="xhair-dot xhair-build" r="4.5"/></g><rect class="hit" id="chart-hit" x="70" y="22" width="522" height="308"/><!--/chart-->
+        </svg>
+        <div class="bvb-tip" id="chart-tip" data-i18n-dynamic hidden></div>
+      </div>
+      <p class="bvb-chart-note">Building has a big cost up front and a smaller cost per unit. The lines cross at the break-even point. Below it RobotStop is cheaper, and the gap is widest at the volumes most teams actually ship.</p>
+    </figure>
+
+    <div class="calc" id="calc" hidden>
+      <div class="calc-inputs">
+        <label class="calc-field">
+          <span class="calc-label">Units you will ship of this device</span>
+          <input class="calc-input" id="calc-units" type="number" min="1" max="10000000" step="1" value="5000" inputmode="numeric">
+        </label>
+        <label class="calc-field">
+          <span class="calc-label">Your engineering cost to build it</span>
+          <span class="calc-money"><span aria-hidden="true">$</span><input class="calc-input" id="calc-nre" type="number" min="0" max="10000000" step="1000" value="50000" inputmode="numeric"></span>
+        </label>
+      </div>
+      <dl class="calc-out" data-i18n-dynamic>
+        <div><dt>Buy from us</dt><dd id="calc-buy">$9,998</dd></div>
+        <div><dt>Build in house</dt><dd id="calc-build">$55,000</dd></div>
+        <div><dt>Breaks even at</dt><dd id="calc-even">50,002 units</dd></div>
+      </dl>
+      <p class="calc-verdict" id="calc-verdict" data-i18n-dynamic aria-live="polite"></p>
+    </div>
+
+    <div class="table-scroll">
+      <table class="docs-table bvb-table">
+        <caption class="sr-only">Total cost of buying versus building, assuming $50,000 of engineering</caption>
+        <thead>
+          <tr><th scope="col">Units shipped</th><th scope="col" class="num">Buy from us</th><th scope="col" class="num">Build in house ($50k)</th><th scope="col">Cheaper</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1,000</td><td class="num">$1,998</td><td class="num">$51,000</td><td>Buy, by $49,000</td></tr>
+          <tr><td>5,000</td><td class="num">$9,998</td><td class="num">$55,000</td><td>Buy, by $45,000</td></tr>
+          <tr><td>20,000</td><td class="num">$39,998</td><td class="num">$70,000</td><td>Buy, by $30,000</td></tr>
+          <tr><td>50,000</td><td class="num">$99,998</td><td class="num">$100,000</td><td>About even</td></tr>
+          <tr><td>100,000</td><td class="num">$199,998</td><td class="num">$150,000</td><td>Build, by $50,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">
+      Build cost is engineering plus $1 of hardware per unit. That assumes
+      your hardware costs what ours does. At small volumes it usually costs
+      more, which moves the break-even point further out.
+    </p>
+  </section>
+
+  <section class="docs-section" id="when">
+    <h2>When you should build it yourself</h2>
+    <p>
+      Yes, building it in house can be the right call, and we would rather say
+      so here than waste your time on a call. Build it if:
+    </p>
+    <ul class="tick-list">
+      <li><strong>You ship tens of thousands of units of one device.</strong> Past about 50,000, the dollar a unit you save is larger than the engineering you spend.</li>
+      <li>You already have people who do embedded machine learning and have time on their schedule.</li>
+      <li>The detector has to live on your own main board, sharing a processor you already pay for, so even our hardware dollar goes away.</li>
+    </ul>
+    <p>
+      If two of those are true, building it is probably cheaper, and we will
+      tell you the same thing if you ask.
+    </p>
+  </section>
+
+  <section class="docs-section" id="who">
+    <h2>Who we built this for</h2>
+    <p>
+      Teams that ship <strong>fewer than 20,000 units of each device</strong>.
+      At 20,000 units you pay us about $40,000 in total. About half of that is
+      hardware you would have bought anyway, so you are paying about $20,000
+      for the software. That is less than half the low end of the in-house
+      estimate, with nothing to build and no schedule to slip, and it keeps
+      working when you change robots.
+    </p>
+    <p>
+      At that volume, a voice stop is a feature you need, not a product you
+      want to own. Spend the engineering on the robot.
+    </p>
+  </section>
+
+  <section class="docs-section" id="assumptions">
+    <h2>What these numbers assume</h2>
+    <ul class="tick-list">
+      <li>The $1 / $1 split is approximate and averaged across a production run; it moves a little with volume and freight.</li>
+      <li>Engineering at $3,500 per engineer-week, for someone who has built this kind of system before. Learning on the job costs more.</li>
+      <li>One language, one device, one board design. Each additional language or board adds to the in-house cost, but not to ours.</li>
+      <li>No certification work on either side. Today&rsquo;s units are uncertified evaluation units; see <a href="legal.html">the terms</a>.</li>
+    </ul>
+
+    <div class="docs-cta">
+      <h3>Try one before you decide</h3>
+      <p>The first unit is free. Put it on your robot, then do this math with real numbers.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="index.html#offerings">Order units &mdash; first one free</a>
+        <a class="btn btn-outline" href="mailto:robotstop.contact@gmail.com?subject=RobotStop%20build%20vs%20buy">Check our math with us</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</main>
+
+<footer class="footer">
+  <div class="shell footer-inner">
+    <div class="footer-brand">
+      <span class="brand-word" translate="no">Robot<span class="brand-word-accent">Stop</span></span>
+      <p>Voice stop-request modules for physical AI.</p>
+      <p class="footer-links">
+        <a href="index.html">Home</a> &middot;
+        <a href="developers.html">Developers</a> &middot;
+        <a href="build-vs-buy.html">Build vs. buy</a> &middot;
+        <a href="legal.html">Legal</a>
+      </p>
+    </div>
+    <p class="footer-legal">
+      Designed to ISO 13849-1 Category 3 architecture. Not certified as a safety component.
+      RobotStop is a supplementary protective measure, is not an emergency stop device, and
+      does not replace guarding, emergency stops, procedures or a risk assessment.
+    </p>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+<script src="build-vs-buy.js" defer></script>
+</body>
+</html>

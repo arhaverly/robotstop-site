@@ -1413,3 +1413,169 @@ html:lang(zh-Hans) body, html:lang(zh-Hant) body { line-height: 1.75; }
 /* The governing-language note on the legal page only matters in translation. */
 .i18n-note { margin-top: 1rem; font-size: 14px; opacity: .7; }
 html:lang(en) .i18n-note { display: none; }
+
+/* ---------- ordering and build vs. buy ---------- */
+
+.price-link, .diy-more a {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px;
+}
+.price-link { color: var(--text); }
+.price-link:hover { color: var(--accent); }
+.diy-more { margin-top: 22px; font-size: 15.5px; }
+.diy-more a { color: var(--muted-dark); text-decoration-color: var(--accent-hi); }
+.diy-more a:hover { color: #fff; }
+
+.order { margin-top: auto; display: grid; gap: 10px; }
+.order-label {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.order-row { display: flex; align-items: center; gap: 14px; }
+.order-qty, .calc-input {
+  width: 120px;
+  height: 46px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--text);
+  font: 500 17px var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+.order-qty:focus, .calc-input:focus { outline: none; border-color: var(--text); }
+.order-total {
+  margin-left: auto;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.order-math { font-size: 13.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.card-price .order .btn { margin-top: 6px; }
+.order-fine { font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+
+.dollar-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 26px;
+  border: 1px solid var(--ink);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.dollar-half { display: grid; gap: 6px; align-content: start; padding: 22px 22px 24px; }
+.dollar-hw { background: var(--sand); }
+.dollar-sw { background: var(--ink); color: #fff; }
+.dollar-amt { font-size: clamp(32px, 4vw, 40px); font-weight: 600; letter-spacing: -0.035em; line-height: 1; }
+.dollar-sw .dollar-amt { color: var(--accent-hi); }
+.dollar-what { font-weight: 600; font-size: 16px; }
+.dollar-why { font-size: 14px; line-height: 1.5; color: var(--muted); }
+.dollar-sw .dollar-why { color: var(--muted-dark); }
+@media (max-width: 560px) { .dollar-split { grid-template-columns: 1fr; } }
+
+.bvb-table .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.docs-plain .bvb-table tbody td:first-child { white-space: normal; }
+.bvb-table tbody td:first-child strong { color: var(--text); }
+.bvb-total td { background: var(--sand); color: var(--text); }
+
+.calc {
+  margin-top: 26px;
+  padding: 24px;
+  border: 1px solid var(--ink);
+  border-radius: var(--r);
+}
+.calc-inputs { display: flex; flex-wrap: wrap; gap: 18px 28px; }
+.calc-field { display: grid; gap: 8px; }
+.calc-label {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted);
+}
+.calc-input { width: 160px; }
+.calc-money { display: flex; align-items: center; gap: 6px; font-size: 17px; color: var(--muted); }
+.calc-out {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 24px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.calc-out dt { font-size: 13.5px; color: var(--muted); }
+.calc-out dd {
+  margin: 4px 0 0;
+  font-size: clamp(20px, 2.6vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 560px) { .calc-out { grid-template-columns: 1fr; } }
+.docs-body .calc-verdict { margin-top: 18px; font-weight: 600; color: var(--text); }
+
+/* --- the cost chart on build-vs-buy.html. Buy is the site red, solid; build
+   is blue (#2a6fb0), dashed. Pair checked with the dataviz validator: CVD
+   ΔE 21.7, normal 31.5, both >= 3:1 on the surface. --- */
+
+.bvb-chart { margin: 28px 0 0; }
+.bvb-chart figcaption { display: grid; gap: 10px; }
+.bvb-chart-title { font-weight: 600; font-size: 16px; color: var(--text); }
+.bvb-legend { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 13.5px; color: var(--muted); }
+.bvb-key { display: inline-flex; align-items: center; gap: 8px; }
+.bvb-swatch { width: 22px; height: 0; border-top: 2.5px solid; }
+.bvb-swatch-buy { border-color: var(--accent); }
+.bvb-swatch-build { border-color: #2a6fb0; border-top-style: dashed; }
+
+.bvb-plot { position: relative; margin-top: 14px; }
+.bvb-plot svg { width: 100%; height: auto; overflow: visible; font-family: var(--sans); }
+.bvb-plot svg:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+.bvb-plot .cz { fill: none; }
+.bvb-plot .cz-buy { fill: #fdf3f2; }
+.bvb-plot .cz-label { font-size: 12px; font-weight: 600; fill: var(--muted); }
+.bvb-plot .cz-label-buy { fill: #a81c15; }
+.bvb-plot .grid { stroke: #ecebe7; stroke-width: 1; }
+.bvb-plot .axis { stroke: #c9c6bf; stroke-width: 1; }
+.bvb-plot .tick { font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.bvb-plot .tick-y { text-anchor: end; }
+.bvb-plot .tick-x { text-anchor: middle; }
+.bvb-plot .axis-title { font-size: 12.5px; fill: var(--muted); text-anchor: middle; }
+.bvb-plot .ln { stroke-width: 2.5; stroke-linecap: round; fill: none; }
+.bvb-plot .ln-buy { stroke: var(--accent); }
+.bvb-plot .ln-build { stroke: #2a6fb0; stroke-dasharray: 7 5; }
+.bvb-plot .end-label { font-size: 12.5px; font-weight: 600; fill: var(--text); }
+.bvb-plot .end-value { font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.bvb-plot .even-guide { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 2 4; opacity: .5; }
+.bvb-plot .even-dot { fill: var(--paper); stroke: var(--ink); stroke-width: 2; }
+.bvb-plot .even-label { font-size: 12.5px; font-weight: 600; fill: var(--text); }
+.bvb-plot .even-value { font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.bvb-plot .xhair-line { stroke: var(--ink); stroke-width: 1; opacity: .35; }
+.bvb-plot .xhair-dot { stroke: var(--paper); stroke-width: 2; }
+.bvb-plot .xhair-buy { fill: var(--accent); }
+.bvb-plot .xhair-build { fill: #2a6fb0; }
+.bvb-plot .hit { fill: transparent; cursor: crosshair; }
+
+.bvb-tip {
+  position: absolute; top: 8px;
+  transform: translateX(14px);
+  min-width: 160px;
+  padding: 10px 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 10px 24px -14px rgba(10,12,13,.45);
+  font-size: 13px;
+  pointer-events: none;
+}
+.bvb-tip.is-left { transform: translateX(calc(-100% - 14px)); }
+.docs-body .bvb-tip p { margin: 0; max-width: none; font-size: 13px; }
+.docs-body .bvb-tip .bvb-tip-head { color: var(--muted); margin-bottom: 6px; }
+.bvb-tip-row { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+.bvb-tip-row strong { color: var(--text); font-variant-numeric: tabular-nums; }
+.bvb-tip-key { width: 14px; border-top: 2.5px solid; }
+.bvb-tip-buy { border-color: var(--accent); }
+.bvb-tip-build { border-color: #2a6fb0; border-top-style: dashed; }
+.docs-body .bvb-tip .bvb-tip-verdict { margin-top: 6px; color: var(--text); font-weight: 600; }
+.docs-body .bvb-chart-note { font-size: 14px; margin-top: 12px; }
+.bvb-plot .cz-label-end { text-anchor: end; }
