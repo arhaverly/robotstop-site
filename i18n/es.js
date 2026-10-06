@@ -457,5 +457,14 @@ RobotStopI18n.add("es", {
   "Type a country name or code": "Escribe el nombre o código de un país",
   "No countries found. Try another name or country code.": "No se encontraron países. Prueba otro nombre o código de país.",
   "Showing the first 6 matches. Keep typing to narrow your search.": "Se muestran las primeras 6 coincidencias. Sigue escribiendo para acotar la búsqueda.",
-  "{total} matching countries. Select a result or press Enter for the first match.": "{total} países coincidentes. Selecciona un resultado o presiona Intro para elegir el primero."
+  "{total} matching countries. Select a result or press Enter for the first match.": "{total} países coincidentes. Selecciona un resultado o presiona Intro para elegir el primero.",
+  "Is your language included?": "¿Está incluido tu idioma?",
+  "Check a language or dialect by its name, ISO 639-3 code or Glottocode. Catalog inclusion does not confirm detector support.": "Consulta un idioma o dialecto por su nombre, código ISO 639-3 o Glottocode. Su inclusión en el catálogo no confirma la compatibilidad del detector.",
+  "Language or dialect": "Idioma o dialecto",
+  "Check inclusion": "Comprobar inclusión",
+  "Enable JavaScript to check language inclusion, or download the catalog below.": "Activa JavaScript para comprobar si se incluye un idioma, o descarga el catálogo a continuación.",
+  "Sources and catalog download": "Fuentes y descarga del catálogo",
+  "Enter a language name or code to check inclusion.": "Escribe el nombre o código de un idioma para comprobar su inclusión.",
+  "Included in the language catalog: {name}.": "Incluido en el catálogo de idiomas: {name}.",
+  "Not found in the language catalog. Try another name or code.": "No se encontró en el catálogo de idiomas. Prueba otro nombre o código."
 });

@@ -457,5 +457,14 @@ RobotStopI18n.add("zh-Hans", {
   "Type a country name or code": "输入国家名称或代码",
   "No countries found. Try another name or country code.": "未找到国家。请尝试其他名称或国家代码。",
   "Showing the first 6 matches. Keep typing to narrow your search.": "显示前 6 个匹配结果。继续输入以缩小搜索范围。",
-  "{total} matching countries. Select a result or press Enter for the first match.": "找到 {total} 个匹配国家。选择一个结果或按回车选择第一个。"
+  "{total} matching countries. Select a result or press Enter for the first match.": "找到 {total} 个匹配国家。选择一个结果或按回车选择第一个。",
+  "Is your language included?": "是否包含你的语言？",
+  "Check a language or dialect by its name, ISO 639-3 code or Glottocode. Catalog inclusion does not confirm detector support.": "按名称、ISO 639-3 代码或 Glottocode 查询语言或方言。列入目录不代表检测器已支持。",
+  "Language or dialect": "语言或方言",
+  "Check inclusion": "查询是否包含",
+  "Enable JavaScript to check language inclusion, or download the catalog below.": "启用 JavaScript 以查询是否包含某种语言，或在下方下载目录。",
+  "Sources and catalog download": "来源与目录下载",
+  "Enter a language name or code to check inclusion.": "输入语言名称或代码以查询是否包含。",
+  "Included in the language catalog: {name}.": "语言目录中已包含：{name}。",
+  "Not found in the language catalog. Try another name or code.": "语言目录中未找到。请尝试其他名称或代码。"
 });

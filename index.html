@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=5543433bfb">
+<link rel="stylesheet" href="styles.css?v=35416bf9c7">
 <script src="i18n.js?v=c3d230d2d3"></script>
 </head>
 <body>
@@ -300,28 +300,28 @@
       Language status is a reference, not a detector support claim.</p>
 
     <div class="language-catalog" id="language-catalog">
-      <h3>Explore the worldwide catalog</h3>
-      <p>Search by name, parent variety, ISO 639-3 code or Glottocode. These are reference
-        entries, not a list of supported models. This full language-and-dialect inventory
-        is broader than the country globe above.</p>
-      <div class="catalog-filters" id="catalog-filters" hidden>
-        <div><label for="language-search">Find a language or dialect</label>
-          <input type="search" id="language-search" placeholder="Try English, Cantonese or eng" aria-controls="catalog-results" autocomplete="off"></div>
-        <div><label for="language-level">Entry type</label>
-          <select id="language-level"><option value="all">Languages + dialects</option><option value="language">Languages</option><option value="dialect">Dialects</option></select></div>
-      </div>
-      <p id="catalog-status" data-i18n-dynamic role="status">The complete catalog is available as a CSV download below.</p>
-      <ul class="catalog-results" id="catalog-results" data-i18n-dynamic></ul>
-      <div class="catalog-pagination" id="catalog-pagination" hidden>
-        <button type="button" class="globe-btn" id="catalog-prev">Previous results</button>
-        <button type="button" class="globe-btn" id="catalog-next">Next results</button>
-      </div>
+      <h3>Is your language included?</h3>
+      <p>Check a language or dialect by its name, ISO 639-3 code or Glottocode.
+        Catalog inclusion does not confirm detector support.</p>
+      <form class="language-lookup" id="language-lookup" hidden>
+        <label for="language-search">Language or dialect</label>
+        <div class="language-lookup-controls">
+          <input type="search" id="language-search" placeholder="Try English, Cantonese or eng"
+                 aria-controls="catalog-status" autocomplete="off" required>
+          <button type="submit" class="globe-btn">Check inclusion</button>
+        </div>
+      </form>
+      <p id="catalog-status" class="language-lookup-status" data-i18n-dynamic role="status" aria-atomic="true" hidden></p>
+      <noscript><p>Enable JavaScript to check language inclusion, or download the catalog below.</p></noscript>
+      <details class="language-sources">
+        <summary>Sources and catalog download</summary>
       <p class="catalog-source">Source: Hammarstr&ouml;m, Forkel, Haspelmath &amp; Bank,
         <a href="https://glottolog.org/meta/downloads">Glottolog 5.3</a> (2026),
         <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
         Filtered and reformatted; retrieved October 6, 2026.
         <a href="language-catalog.csv" download>Download all 21,944 entries (CSV)</a> &middot;
         <a href="language-catalog-source.json">Count method and attribution</a>.</p>
+      </details>
       <p>Can&rsquo;t find your variety? <a href="mailto:robotstop.contact@gmail.com?subject=Language%20or%20dialect%20coverage">Tell us its name and region</a>.
         Catalog inclusion does not limit the expansion program.</p>
     </div>
@@ -597,7 +597,7 @@
 <script src="country-languages.js?v=ccd7e256e4" defer></script>
 <script src="globe.js?v=8a95c431f3" defer></script>
 <script src="language-catalog.js?v=98963e0c17" defer></script>
-<script src="languages.js?v=440882dce4" defer></script>
+<script src="languages.js?v=b5d15bf3d4" defer></script>
 <script src="main.js?v=5ee04a7774" defer></script>
 <script src="order.js?v=08d0ecc517" defer></script>
 </body>

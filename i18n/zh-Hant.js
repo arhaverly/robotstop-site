@@ -457,5 +457,14 @@ RobotStopI18n.add("zh-Hant", {
   "Type a country name or code": "輸入國家名稱或代碼",
   "No countries found. Try another name or country code.": "找不到國家。請嘗試其他名稱或國家代碼。",
   "Showing the first 6 matches. Keep typing to narrow your search.": "顯示前 6 個符合的結果。繼續輸入以縮小搜尋範圍。",
-  "{total} matching countries. Select a result or press Enter for the first match.": "找到 {total} 個符合的國家。選擇一個結果或按 Enter 選擇第一個。"
+  "{total} matching countries. Select a result or press Enter for the first match.": "找到 {total} 個符合的國家。選擇一個結果或按 Enter 選擇第一個。",
+  "Is your language included?": "是否包含你的語言？",
+  "Check a language or dialect by its name, ISO 639-3 code or Glottocode. Catalog inclusion does not confirm detector support.": "按名稱、ISO 639-3 代碼或 Glottocode 查詢語言或方言。列入目錄不代表偵測器已支援。",
+  "Language or dialect": "語言或方言",
+  "Check inclusion": "查詢是否包含",
+  "Enable JavaScript to check language inclusion, or download the catalog below.": "啟用 JavaScript 以查詢是否包含某種語言，或在下方下載目錄。",
+  "Sources and catalog download": "來源與目錄下載",
+  "Enter a language name or code to check inclusion.": "輸入語言名稱或代碼以查詢是否包含。",
+  "Included in the language catalog: {name}.": "語言目錄中已包含：{name}。",
+  "Not found in the language catalog. Try another name or code.": "語言目錄中未找到。請嘗試其他名稱或代碼。"
 });
